@@ -1,1 +1,23 @@
-<p>portafolio works!</p>
+<div *ngIf="programador as prog; else noEncontrado">
+  <h1>{{ prog.nombre }}</h1>
+  <p class="especialidad">{{ prog.especialidad }}</p>
+  <p class="descripcion">{{ prog.descripcion }}</p>
+
+  <h2>Proyectos</h2>
+  <ul>
+    <li *ngFor="let proyecto of prog.proyectos">
+      <h3>{{ proyecto.titulo }}</h3>
+      <p>{{ proyecto.descripcion }}</p>
+      <small>Tecnologías: {{ proyecto.tecnologias.join(', ') }}</small>
+    </li>
+  </ul>
+
+  <button routerLink="/asesorias">
+    Agendar asesoría con {{ prog.nombre }}
+  </button>
+</div>
+
+<ng-template #noEncontrado>
+  <p>Programador no encontrado.</p>
+</ng-template>
+

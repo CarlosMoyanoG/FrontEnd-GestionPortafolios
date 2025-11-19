@@ -1,1 +1,23 @@
-<p>pagina-inicio works!</p>
+<h1>Portafolio de Servicios</h1>
+<p>
+    Encuentra aquí los perfiles de nuestros programadores y agenda una asesoría según las necesidades de tu proyecto
+</p>
+
+<section class="tarjetas">
+  <article class="tarjeta" *ngFor="let prog of programadores">
+    <h2>{{ prog.nombre }}</h2>
+    <p class="especialidad">{{ prog.especialidad }}</p>
+    <p class="descripcion">{{ prog.descripcion }}</p>
+
+    <h3>Proyectos destacados</h3>
+    <ul>
+      <li *ngFor="let proyecto of prog.proyectos">
+        <strong>{{ proyecto.titulo }}:</strong>  {{ proyecto.descripcion }}
+      </li>
+    </ul>
+
+    <button [routerLink]="['/portafolios', prog.id]">
+      Ver portafolio
+    </button>
+  </article>
+</section>
