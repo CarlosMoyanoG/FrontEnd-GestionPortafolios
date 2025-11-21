@@ -13,7 +13,7 @@
       required
     >
       <option value="0" disabled>Selecciona un programador</option>
-      <option *ngFor="let prog of programadores" [value]="prog.id">
+      <option *ngFor="let prog of programadores" [ngValue]="prog.id">
         {{ prog.nombre }} – {{ prog.especialidad }}
       </option>
     </select>

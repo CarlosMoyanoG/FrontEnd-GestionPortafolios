@@ -1,1 +1,44 @@
-<p>admin-programador works!</p>
+<div *ngIf="programador; else sinProgramador">
+  <h1>Panel de programador</h1>
+
+  <section class="info-programador">
+    <h2>{{ programador.nombre }}</h2>
+    <p class="especialidad">{{ programador.especialidad }}</p>
+    <p class="descripcion">{{ programador.descripcion }}</p>
+  </section>
+
+  <section class="asesorias">
+    <h2>Mis asesorías agendadas</h2>
+
+    <table class="tabla-asesorias" *ngIf="asesorias.length; else sinAsesorias">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Cliente</th>
+          <th>Correo</th>
+          <th>Fecha</th>
+          <th>Hora</th>
+          <th>Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let a of asesorias">
+          <td>{{ a.id }}</td>
+          <td>{{ a.nombreCliente }}</td>
+          <td>{{ a.emailCliente }}</td>
+          <td>{{ a.fecha }}</td>
+          <td>{{ a.hora }}</td>
+          <td>{{ a.descripcionProyecto }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #sinAsesorias>
+      <p>Todavía no tienes asesorías agendadas.</p>
+    </ng-template>
+  </section>
+</div>
+
+<ng-template #sinProgramador>
+  <p>No se encontró información del programador actual.</p>
+</ng-template>

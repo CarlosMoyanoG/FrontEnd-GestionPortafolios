@@ -1,1 +1,93 @@
-<p>admin-dashboard works!</p>
+<h1>Panel de administrador</h1>
+
+
+
+<div class="layout-principal">
+  <div class="columna-izquierda">
+    <h2>Asesorías agendadas</h2>
+    <table class="tabla-asesorias" *ngIf="asesorias.length; else sinAsesorias">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Programador</th>
+          <th>Cliente</th>
+          <th>Correo</th>
+          <th>Fecha</th>
+          <th>Hora</th>
+          <th>Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let a of asesorias">
+          <td>{{ a.id }}</td>
+          <td>{{ a.programadorNombre || ('ID ' + a.programadorId) }}</td>
+          <td>{{ a.nombreCliente }}</td>
+          <td>{{ a.emailCliente }}</td>
+          <td>{{ a.fecha }}</td>
+          <td>{{ a.hora }}</td>
+          <td>{{ a.descripcionProyecto }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #sinAsesorias>
+      <p>Todavía no hay asesorías agendadas.</p>
+    </ng-template>
+  </div>
+
+
+  <div class="columna-derecha">
+    <h2>Gestión de programadores</h2>
+    <section class="seccion-programadores">
+      <div class="form-programador">
+        <h3>Registrar nuevo programador</h3>
+
+        <form (ngSubmit)="crearProgramador()" #fProg="ngForm">
+          <label>
+            Nombre
+            <input
+              type="text"
+              name="nombre"
+              [(ngModel)]="nuevoProgramador.nombre"
+              required
+            />
+          </label>
+
+          <label>
+            Especialidad
+            <input
+              type="text"
+              name="especialidad"
+              [(ngModel)]="nuevoProgramador.especialidad"
+              required
+            />
+          </label>
+
+          <label>
+            Descripción
+            <textarea
+              name="descripcion"
+              rows="3"
+              [(ngModel)]="nuevoProgramador.descripcion"
+            ></textarea>
+          </label>
+
+          <button type="submit" [disabled]="fProg.invalid">
+            Guardar programador
+          </button>
+        </form>
+      </div>
+
+      <div class="lista-programadores">
+        <h3>Programadores registrados</h3>
+
+        <ul>
+          <li *ngFor="let p of programadores">
+            <strong>{{ p.nombre }}</strong> – {{ p.especialidad }}
+            <p class="texto-pequeño">{{ p.descripcion }}</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </div>
+</div>

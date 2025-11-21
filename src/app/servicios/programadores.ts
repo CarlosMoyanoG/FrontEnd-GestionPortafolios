@@ -17,7 +17,7 @@ export class Programadores {
           id: 1,
           titulo: 'Panel administrativo',
           descripcion: 'Dashboard para gestión de ventas.',
-          tecnologias: ['Angular', 'Tailwind', 'Firebase']
+          tecnologias: ['Angular', 'Tailwind', 'Firebase'],
         }
       ]
     },
@@ -37,11 +37,35 @@ export class Programadores {
     }
   ];
 
+  private ultimoId = 2;
+
   getProgramadores(): Programador[] {
     return this.programadores;
   }
 
   getProgramadorById(id: number): Programador | undefined {
     return this.programadores.find(p => p.id === id);
+  }
+
+  crearProgramador(data: Omit<Programador, 'id'>): Programador {
+    this.ultimoId++;
+    const nuevoProg: Programador = {id: this.ultimoId,...data};
+    this.programadores.push(nuevoProg);
+    console.log('Programador creado:', nuevoProg);
+    return nuevoProg;
+  }
+
+  eliminarProgramador(id: number): void {
+    const listaTemporal: Programador[] = [];
+    
+    for (let i = 0; i < this.programadores.length; i++) {
+      const programador = this.programadores[i];
+
+      if (programador.id !== id) {
+        listaTemporal.push(programador);
+      }
+    }
+
+    this.programadores = listaTemporal;
   }
 }

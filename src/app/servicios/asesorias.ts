@@ -13,6 +13,7 @@ export class Asesorias {
     this.ultimoId++;
     const asesoria: Asesoria = { id: this.ultimoId, ...nueva};
     this.asesorias.push(asesoria);
+    console.log("Asesoria creada: ", asesoria)
 
     return asesoria;
   }

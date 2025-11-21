@@ -11,15 +11,16 @@ label {
   flex-direction: column;
   font-size: 0.95rem;
   gap: 0.25rem;
+  color: #142433;
 }
 
-input,
-select,
-textarea {
+input,select,textarea {
   padding: 0.45rem 0.6rem;
   border-radius: 0.5rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid #295264;
   font: inherit;
+  color: #142433;
+  background-color: #fff;
 }
 
 button[type='submit'] {
@@ -29,10 +30,13 @@ button[type='submit'] {
   border-radius: 9999px;
   border: none;
   cursor: pointer;
+  background-color: #BD2F28;
+  color: #fff;
+  width: auto;
 }
 
 .mensaje-exito {
   margin-top: 1rem;
-  color: #16a34a;
+  color: #295264;
   font-weight: 500;
 }

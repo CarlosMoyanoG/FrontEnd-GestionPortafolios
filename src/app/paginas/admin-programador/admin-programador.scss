@@ -1,0 +1,37 @@
+.info-programador {
+  margin-bottom: 1.5rem;
+}
+
+.info-programador .especialidad {
+  font-weight: 600;
+  color: #BD2F28;
+}
+
+.info-programador .descripcion {
+  color: #295264;
+}
+
+.tabla-asesorias {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.tabla-asesorias th{
+  border: 1px solid #bd2f28;
+  padding: 0.5rem 0.7rem;
+  text-align: left;
+  color: #ffffff;
+}
+
+.tabla-asesorias td{
+  border: 1px solid #bd2f28;
+  padding: 0.5rem 0.7rem;
+  text-align: left;
+}
+
+.tabla-asesorias thead {
+  background: #bd2f28;
+  color: #142433;
+}
