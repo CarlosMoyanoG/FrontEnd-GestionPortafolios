@@ -1,67 +1,76 @@
+/* --- Contenedor Principal --- */
 .contenedor-login {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 50vh; 
+  min-height: 80vh; 
   padding: 1rem;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
-.login-card {
+/* --- Tarjeta --- */
+.tarjeta-login {
   background-color: #fff;
   width: 100%;
-  max-width: 420px; 
-  padding: 3rem 2.5rem;
+  max-width: 400px; 
+  padding: 2.5rem 2rem;
   border-radius: 16px;
+  /* Sombra suave y elegante */
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(20, 36, 51, 0.05);
   text-align: center;
   transition: transform 0.3s ease;
 }
 
-.login-card:hover {
-  transform: translateY(-2px);
+.tarjeta-login:hover {
+  transform: translateY(-3px);
 }
 
-.login-header {
-  margin-bottom: 2.5rem;
+/* --- Encabezado --- */
+.encabezado-login {
+  margin-bottom: 2rem;
 }
 
-.icon-circle {
+.circulo-icono {
   width: 60px;
   height: 60px;
-  background-color: #fef2f2;
-  color: #BD2F28;
+  background-color: #fef2f2; /* Fondo rojo muy claro */
+  color: #BD2F28; /* Tu rojo principal */
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 1.5rem auto;
+  margin: 0 auto 1rem auto;
   font-size: 1.5rem;
 }
 
 h1 {
-  color: #142433;
-  font-size: 1.75rem;
+  color: #142433; /* Tu azul oscuro */
+  font-size: 1.6rem;
   margin: 0 0 0.5rem 0;
   font-weight: 700;
 }
 
 .subtitulo {
-  color: #295264;
+  color: #295264; /* Azul intermedio */
   font-size: 0.95rem;
-  line-height: 1.5;
+  line-height: 1.4;
   margin: 0;
 }
 
-.botones-login {
+/* --- Botones --- */
+.contenedor-botones {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  margin-bottom: 1.5rem;
 }
 
-.btn-login {
-  padding: 0.9rem 1.5rem;
-  border-radius: 8px;
+.boton-google {
+  background-color: #142433; /* Fondo oscuro */
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  border-radius: 50px; /* Bordes totalmente redondos */
   border: none;
   font-size: 1rem;
   font-weight: 600;
@@ -70,79 +79,71 @@ h1 {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   width: 100%;
+  box-shadow: 0 4px 6px rgba(20, 36, 51, 0.1);
 }
 
-.btn-login i {
-  font-size: 1.1rem;
+.boton-google i {
+  font-size: 1.2rem;
 }
 
-.btn-admin {
-  background-color: #142433;
-  color: #fff;
-}
-.btn-admin:hover {
-  background-color: #1c3347;
+.boton-google:hover:not(:disabled) {
+  background-color: #BD2F28; /* Cambia a rojo al pasar el mouse */
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(20, 36, 51, 0.2);
+  box-shadow: 0 6px 12px rgba(189, 47, 40, 0.2);
 }
 
-.btn-programador {
-  background-color: #BD2F28;
-  color: #fff;
-}
-.btn-programador:hover {
-  background-color: #991b1b;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(189, 47, 40, 0.2);
+.boton-google:disabled {
+  background-color: #94a3b8;
+  cursor: wait;
 }
 
-.separador {
-  color: #9ca3af;
-  font-size: 0.9rem;
-  position: relative;
-  margin: 0.5rem 0;
-}
-.separador::before, .separador::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  width: 40%;
-  height: 1px;
-  background-color: #e5e7eb;
-}
-.separador::before { left: 0; }
-.separador::after { right: 0; }
-
-.btn-visitante {
-  background-color: transparent;
-  border: 2px solid #e5e7eb;
-  color: #295264;
-}
-.btn-visitante:hover {
-  border-color: #142433;
-  color: #142433;
-  background-color: #f9fafb;
+/* --- Mensajes y Alertas --- */
+.area-mensajes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-.mensaje-container {
-  margin-top: 1.5rem;
+.mensaje {
   padding: 0.8rem;
-  background-color: #fff3cd; 
-  color: #856404;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 0.9rem;
-  border: 1px solid #ffeeba;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  animation: aparecer 0.3s ease;
 }
 
-.login-mensaje {
-  margin: 0;
+.mensaje.info {
+  background-color: #e0f2fe;
+  color: #0369a1;
 }
 
-.login-nota {
+.mensaje.exito {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.mensaje.error {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+/* --- Nota al pie --- */
+.nota-pie {
   margin-top: 2rem;
   font-size: 0.8rem;
   color: #9ca3af;
   font-style: italic;
+}
+
+/* Animación suave para los mensajes */
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }

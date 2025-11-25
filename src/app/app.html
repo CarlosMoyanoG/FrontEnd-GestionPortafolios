@@ -1,24 +1,37 @@
 <header class="header-principal">
   <div class="titulo">Portafolios</div>
 
-  <div>
-    <nav class="nav">
-      <a routerLink="/login" routerLinkActive="active"> Login </a>
-      <a routerLink="/inicio" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"> Inicio </a>
-      <a routerLink="/agendar" routerLinkActive="active"> Agendar Asesoria</a>
+  <nav class="nav">
+    <a routerLink="/login" routerLinkActive="active" *ngIf="!auth.usuarioActual.id"> Login </a>
+    <a routerLink="/inicio" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"> Inicio </a>
+    <a routerLink="/agendar" routerLinkActive="active"> Agendar Asesoría</a>
 
-      <a *ngIf="auth.esAdmin()"
-        routerLink="/admin"
-        routerLinkActive="active">
-        Admin
-      </a>
+    <a *ngIf="auth.esAdmin()" routerLink="/admin" routerLinkActive="active">
+      Admin
+    </a>
 
-      <a *ngIf="auth.esProgramador()"
-        routerLink="/programador"
-        routerLinkActive="active">
-        Programador
-      </a>
-    </nav>
+    <a *ngIf="auth.esProgramador()" routerLink="/programador" routerLinkActive="active">
+      Programador
+    </a>
+  </nav>
+
+  <div class="perfil-usuario" *ngIf="auth.usuarioActual.id"> <div class="info-texto">
+      <span class="nombre">{{ auth.usuarioActual.nombre }}</span>
+      <span class="rol">
+        {{ auth.usuarioActual.rol | titlecase }} 
+        <span *ngIf="auth.usuarioActual.email" class="email-corto">| {{ auth.usuarioActual.email }}</span>
+      </span>
+    </div>
+
+    <img
+      *ngIf="auth.usuarioActual.fotoUrl"
+      [src]="auth.usuarioActual.fotoUrl"
+      alt="Perfil"
+      class="avatar-usuario"
+    />
+    <div *ngIf="!auth.usuarioActual.fotoUrl" class="avatar-placeholder">
+       {{ auth.usuarioActual.nombre.charAt(0) }}
+    </div>
   </div>
 </header>
 

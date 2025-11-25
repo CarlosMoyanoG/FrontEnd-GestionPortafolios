@@ -1,40 +1,39 @@
 <div class="contenedor-login">
-  <div class="login-card">
+  <div class="tarjeta-login">
     
-    <div class="login-header">
-      <div class="icon-circle">
+    <div class="encabezado-login">
+      <div class="circulo-icono">
         <i class="fas fa-lock"></i>
       </div>
       <h1>Iniciar sesión</h1>
       <p class="subtitulo">
-        Elige un tipo de usuario para ingresar al sistema (modo demostración).
+        Ingresa con tu cuenta para acceder al sistema.
       </p>
     </div>
 
-    <div class="botones-login">
-      <button class="btn-login btn-admin" (click)="loginAdmin()">
-        <i class="fas fa-user-shield"></i> Entrar como Administrador
-      </button>
-
-      <button class="btn-login btn-programador" (click)="loginProgramador()">
-        <i class="fas fa-code"></i> Entrar como Programador
-      </button>
-
-      <div class="separador">o</div>
-
-      <button class="btn-login btn-visitante" (click)="entrarComoVisitante()">
-        <i class="fas fa-user"></i> Continuar como Visitante
+    <div class="contenedor-botones">
+      <button class="boton-google" (click)="loginGoogle()" [disabled]="cargando">
+        <i class="fab fa-google"></i> 
+        {{ cargando ? 'Conectando...' : 'Iniciar sesión con Google' }}
       </button>
     </div>
 
-    <div *ngIf="mensaje" class="mensaje-container">
-      <p class="login-mensaje">
-        <i class="fas fa-info-circle"></i> {{ mensaje }}
+    <div class="area-mensajes">
+      <p *ngIf="cargando" class="mensaje info">
+        <i class="fas fa-spinner fa-spin"></i> Procesando solicitud...
       </p>
+
+      <div *ngIf="mensaje" class="mensaje exito">
+        <i class="fas fa-check-circle"></i> {{ mensaje }}
+      </div>
+
+      <div *ngIf="error" class="mensaje error">
+        <i class="fas fa-exclamation-triangle"></i> {{ error }}
+      </div>
     </div>
 
-    <p class="login-nota">
-      Nota: Más adelante, esta pantalla usará autenticación real con Google (Firebase).
+    <p class="nota-pie">
+      Nota: Esta app usa autenticación con Firebase.
     </p>
   </div>
 </div>

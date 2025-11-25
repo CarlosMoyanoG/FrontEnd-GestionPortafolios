@@ -13,27 +13,45 @@ import { Autenticacion } from '../../servicios/autenticacion';
 export class Login {
 
   mensaje = '';
+  error = '';
+  cargando = false;
 
   constructor(
-    private auth: Autenticacion,
+    public auth: Autenticacion,
     private router: Router
   ) {}
 
-  loginAdmin() {
-    this.auth.loginComoAdmin();
-    this.mensaje = 'Has iniciado sesión como Administrador.';
-    this.router.navigate(['/admin']);
+  async loginGoogle() {
+    this.cargando = true;
+    this.error = '';
+    this.mensaje = '';
+
+    try {
+      await this.auth.loginConGoogle();
+
+      const rol = this.auth.usuarioActual.rol;
+
+      if (rol === 'admin') {
+        this.mensaje = 'Sesión iniciada como Administrador.';
+        this.router.navigate(['/admin']);
+      } else if (rol === 'programador') {
+        this.mensaje = 'Sesión iniciada como Programador.';
+        this.router.navigate(['/programador']);
+      } else {
+        this.mensaje = 'Sesión iniciada como Visitante.';
+        this.router.navigate(['/inicio']);
+      }
+
+    } catch (e) {
+      console.error(e);
+      this.error = 'Ocurrió un error al iniciar sesión con Google.';
+    } finally {
+      this.cargando = false;
+    }
   }
 
-  loginProgramador() {
-    this.auth.loginComoProgramador();
-    this.mensaje = 'Has iniciado sesión como Programador.';
-    this.router.navigate(['/programador']);
-  }
-
-  entrarComoVisitante() {
-    this.auth.cerrarSesion();
-    this.mensaje = 'Estás navegando como visitante.';
+  async salir() {
+    await this.auth.cerrarSesion();
     this.router.navigate(['/inicio']);
   }
 }
