@@ -30,25 +30,25 @@ export class AdminProgramador implements OnInit {
   }
 
   private async cargarDatos(): Promise<void> {
-    const programadorId = this.auth.usuarioActual.programadorId ?? 1;
+  const programadorId = this.auth.usuarioActual.programadorId ?? 1;
 
-    this.programador = this.programadorService.getProgramadorById(programadorId);
-    const todas_asesorias = await this.asesoriasService.getAsesorias();
+  this.programador = await this.programadorService.getProgramadorById(programadorId);
+  const todas_asesorias = await this.asesoriasService.getAsesorias();
 
-    if (this.programador) {
-      const listaFiltrada: Asesoria[] = [];
+  if (this.programador) {
+    const listaFiltrada: Asesoria[] = [];
 
-      for (let i = 0; i < todas_asesorias.length; i++) {
-        const asesoria = todas_asesorias[i];
+    for (let i = 0; i < todas_asesorias.length; i++) {
+      const asesoria = todas_asesorias[i];
 
-        if (asesoria.programadorId === this.programador.id) {
-          listaFiltrada.push(asesoria);
-        }
+      if (asesoria.programadorId === this.programador.id) {
+        listaFiltrada.push(asesoria);
       }
-
-      this.asesorias = listaFiltrada;
     }
+
+    this.asesorias = listaFiltrada;
   }
+}
 
   async actualizarEstado(a: Asesoria): Promise<void> {
     await this.asesoriasService.actualizarAsesoria(a.id, {

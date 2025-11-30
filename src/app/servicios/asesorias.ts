@@ -1,15 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Asesoria } from '../modelos/asesoria';
 
-import {
-  Firestore,
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-  updateDoc,
-} from '@angular/fire/firestore';
+import {Firestore, collection, addDoc, getDocs, query, where, updateDoc} from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',

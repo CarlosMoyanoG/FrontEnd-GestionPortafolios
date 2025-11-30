@@ -29,30 +29,39 @@ export class Agendar {
   };
 
   mensajeExito = '';
-  sinHorarios = false;
+
   disponibilidadesProgramador: Disponibilidad[] = [];
   selectedSlotId = 0;
+  sinHorarios = false;
 
-  constructor(private programadoresService: Programadores, private asesoriasService: Asesorias, private disponibilidadesService: Disponibilidades, private route: ActivatedRoute, private Autenticacion: Autenticacion) {
-    this.programadores = this.programadoresService.getProgramadores();
-
-    const progIdParam = this.route.snapshot.queryParamMap.get('programadorId');
-    if (progIdParam) {
-      this.form.programadorId = +progIdParam;
-      this.cargarDisponibilidades(this.form.programadorId);
-    }
-
-    const email = this.Autenticacion.usuarioActual.email;
+  constructor(
+    private programadoresService: Programadores,
+    private asesoriasService: Asesorias,
+    private disponibilidadesService: Disponibilidades,
+    private route: ActivatedRoute,
+    private auth: Autenticacion
+  ) {
+    const email = this.auth.usuarioActual.email;
     if (email) {
       this.form.emailCliente = email;
     }
   }
 
-  cargarDisponibilidades(programadorId: number) {
-    this.disponibilidadesProgramador =
-    this.disponibilidadesService.getPorProgramador(programadorId);
-    this.selectedSlotId = 0;
+  async ngOnInit(): Promise<void> {
+    this.programadores = await this.programadoresService.getProgramadores();
 
+    const progIdParam = this.route.snapshot.queryParamMap.get('programadorId');
+    if (progIdParam) {
+      this.form.programadorId = +progIdParam;
+      await this.cargarDisponibilidades(this.form.programadorId);
+    }
+  }
+
+  async cargarDisponibilidades(programadorId: number) {
+    this.disponibilidadesProgramador =
+      await this.disponibilidadesService.getPorProgramador(programadorId);
+
+    this.selectedSlotId = 0;
     this.sinHorarios = this.disponibilidadesProgramador.length === 0;
 
     if (this.sinHorarios) {
@@ -61,8 +70,8 @@ export class Agendar {
     }
   }
 
-  onProgramadorChange(id: number) {
-    this.cargarDisponibilidades(id);
+  async onProgramadorChange(id: number) {
+    await this.cargarDisponibilidades(id);
     this.form.fecha = '';
     this.form.hora = '';
   }
@@ -81,6 +90,11 @@ export class Agendar {
       return;
     }
 
+    if (this.sinHorarios) {
+      alert('Este programador no tiene horarios disponibles, elige otro.');
+      return;
+    }
+
     await this.asesoriasService.crearAsesoria({
       programadorId: this.form.programadorId,
       nombreCliente: this.form.nombreCliente,
@@ -90,10 +104,10 @@ export class Agendar {
       descripcionProyecto: this.form.descripcionProyecto
     });
 
-    this.mensajeExito = 'Tu solicitud fue enviada. Recibirás la confirmación del programador cuando apruebe o rechace la asesoría.';
+    this.mensajeExito =
+      'Tu solicitud fue enviada. Recibirás la confirmación del programador cuando apruebe o rechace la asesoría.';
 
     this.form.nombreCliente = '';
-    this.form.emailCliente = '';
     this.form.fecha = '';
     this.form.hora = '';
     this.form.descripcionProyecto = '';

@@ -7,6 +7,9 @@ import { Programadores } from '../../servicios/programadores';
 import { Asesorias } from '../../servicios/asesorias';
 import { Disponibilidad } from '../../modelos/disponibilidad';
 import { Disponibilidades } from '../../servicios/disponibilidades';
+import { Programador } from '../../modelos/programador';
+import { RolUsuario, Usuario } from '../../modelos/usuario';
+import { Usuarios } from '../../servicios/usuarios';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -18,8 +21,10 @@ import { Disponibilidades } from '../../servicios/disponibilidades';
 export class AdminDashboard implements OnInit {
 
   asesorias: any[] = [];
-  programadores: any[] = [];
+  programadores: Programador[] = [];
   disponibilidades: Disponibilidad[] = [];
+  usuarios: (Usuario & { uid: string })[] = [];
+  rolesPosibles: RolUsuario[] = ['visitante', 'admin', 'programador'];
 
   nuevoProgramador = {
     nombre: '',
@@ -35,19 +40,23 @@ export class AdminDashboard implements OnInit {
 
   mensajeDisponibilidad = '';
 
-  constructor( private asesoriasService: Asesorias, private programadoresService: Programadores, private disponibilidadesService: Disponibilidades) {
-    this.programadores = this.programadoresService.getProgramadores();
-    this.disponibilidades = this.disponibilidadesService.getTodas();
-  }
+  constructor(
+    private asesoriasService: Asesorias, 
+    private programadoresService: Programadores, 
+    private disponibilidadesService: Disponibilidades,
+    private usuariosService: Usuarios
+  ) {}
 
   async ngOnInit(): Promise<void> {
+    this.programadores = await this.programadoresService.getProgramadores();
+    this.disponibilidades = await this.disponibilidadesService.getTodas();
+    this.usuarios = await this.usuariosService.getUsuarios();
+    console.log('USUARIOS CARGADOS:', this.usuarios);
     await this.cargarAsesorias();
   }
 
-  // ====== ASESORÍAS (Firebase) ======
-
   private async cargarAsesorias(): Promise<void> {
-    const listaProgramadores = this.programadoresService.getProgramadores();
+    const listaProgramadores = this.programadores;
     const listaAsesorias: Asesoria[] = await this.asesoriasService.getAsesorias();
 
     this.asesorias = listaAsesorias.map(asesoria => {
@@ -57,26 +66,22 @@ export class AdminDashboard implements OnInit {
         programadorNombre: programadorEncontrado ? programadorEncontrado.nombre : 'Sin Asignar'
       };
     });
-
-    console.log('Asesorías desde Firestore:', this.asesorias);
   }
 
-  // ====== PROGRAMADORES (en memoria) ======
-
-  crearProgramador() {
+  async crearProgramador() {
     if (!this.nuevoProgramador.nombre || !this.nuevoProgramador.especialidad) {
       alert('Nombre y especialidad son obligatorios');
       return;
     }
 
-    this.programadoresService.crearProgramador({
+    await this.programadoresService.crearProgramador({
       nombre: this.nuevoProgramador.nombre,
       especialidad: this.nuevoProgramador.especialidad,
       descripcion: this.nuevoProgramador.descripcion,
       proyectos: []
     });
 
-    this.programadores = this.programadoresService.getProgramadores();
+    this.programadores = await this.programadoresService.getProgramadores();
 
     this.nuevoProgramador = {
       nombre: '',
@@ -85,9 +90,7 @@ export class AdminDashboard implements OnInit {
     };
   }
 
-  // ====== DISPONIBILIDADES (en memoria) ======
-
-  crearDisponibilidad() {
+  async crearDisponibilidad() {
     if (
       !this.nuevaDisponibilidad.programadorId ||
       !this.nuevaDisponibilidad.fecha ||
@@ -97,13 +100,13 @@ export class AdminDashboard implements OnInit {
       return;
     }
 
-    this.disponibilidadesService.crearDisponibilidad({
+    await this.disponibilidadesService.crearDisponibilidad({
       programadorId: this.nuevaDisponibilidad.programadorId,
       fecha: this.nuevaDisponibilidad.fecha,
-      hora: this.nuevaDisponibilidad.hora
+      hora: this.nuevaDisponibilidad.hora,
     });
 
-    this.disponibilidades = this.disponibilidadesService.getTodas();
+    this.disponibilidades = await this.disponibilidadesService.getTodas();
 
     this.nuevaDisponibilidad = {
       programadorId: 0,
@@ -118,5 +121,21 @@ export class AdminDashboard implements OnInit {
   obtenerNombreProgramador(id: number): string {
     const programador = this.programadores.find(p => p.id === id);
     return programador ? programador.nombre : 'ID ' + id;
+  }
+
+  async guardarUsuario(u: Usuario & { uid: string }) {
+    await this.usuariosService.actualizarUsuarioRolYProgramador(
+      u.uid,
+      u.rol,
+      u.rol === 'programador' ? u.programadorId ?? null : null
+    );
+
+    if (u.rol === 'programador' && u.programadorId != null) {
+      await this.programadoresService.actualizarDuenioUid(u.programadorId, u.uid);
+    } else if (u.programadorId != null) {
+      await this.programadoresService.actualizarDuenioUid(u.programadorId, null);
+    }
+
+    alert('Usuario actualizado correctamente');
   }
 }

@@ -1,6 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Firestore,doc,getDoc,setDoc,updateDoc } from '@angular/fire/firestore';
 import { Usuario, RolUsuario } from '../modelos/usuario';
+
+import {
+  Firestore,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  collection,
+  getDocs,
+  deleteField,           // 👈 importante
+} from '@angular/fire/firestore';
 
 interface DatosFirebaseUsuario {
   uid: string;
@@ -12,6 +22,7 @@ interface DatosFirebaseUsuario {
 @Injectable({
   providedIn: 'root',
 })
+
 export class Usuarios {
   constructor(private firestore: Firestore) {}
 
@@ -19,9 +30,7 @@ export class Usuarios {
     return doc(this.firestore, 'usuarios', uid);
   }
 
-  async obtenerOCrearUsuarioDesdeFirebase(
-    datos: DatosFirebaseUsuario
-  ): Promise<Usuario> {
+  async obtenerOCrearUsuarioDesdeFirebase(datos: DatosFirebaseUsuario): Promise<Usuario> {
     const ref = this.refUsuario(datos.uid);
     const snap = await getDoc(ref);
 
@@ -29,23 +38,17 @@ export class Usuarios {
       const nuevo: Usuario = {
         id: Date.now(),
         nombre: datos.nombre || 'Usuario',
-        rol: 'visitante', 
+        rol: 'visitante',
       };
 
-      await setDoc(ref, nuevo);
+      if (datos.email) nuevo.email = datos.email;
+      if (datos.fotoUrl) nuevo.fotoUrl = datos.fotoUrl;
+
+      await setDoc(ref, nuevo as any);
       return nuevo;
     }
 
     return snap.data() as Usuario;
-  }
-
-  async actualizarRol(uid: string,rol: RolUsuario, programadorId?: number): Promise<void> {
-    const ref = this.refUsuario(uid);
-    const cambios: Partial<Usuario> = {
-      rol,
-      programadorId,
-    };
-    await updateDoc(ref, cambios);
   }
 
   async obtenerUsuario(uid: string): Promise<Usuario | null> {
@@ -53,4 +56,27 @@ export class Usuarios {
     const snap = await getDoc(ref);
     return snap.exists() ? (snap.data() as Usuario) : null;
   }
+
+  async getUsuarios(): Promise<(Usuario & { uid: string })[]> {
+    const colRef = collection(this.firestore, 'usuarios');
+    const snap = await getDocs(colRef);
+
+    return snap.docs.map(d => {
+      const data = d.data() as Usuario;
+      return { ...data, uid: d.id };
+    });
+  }
+
+  async actualizarUsuarioRolYProgramador(uid: string, rol: RolUsuario, programadorId?: number | null): Promise<void> {
+    const ref = this.refUsuario(uid);
+    const cambios: any = { rol };
+
+    if (rol === 'programador' && programadorId != null) {
+      cambios.programadorId = programadorId;
+    } else {
+      cambios.programadorId = deleteField();
+    }
+    await updateDoc(ref, cambios);
+  }
+
 }

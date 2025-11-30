@@ -11,6 +11,7 @@ export interface Programador {
   githubUrl?: string;
   linkedinUrl?: string;
   sitioWeb?: string;
+  duenioUid?: string;
 
   proyectos: Proyecto[];
 }

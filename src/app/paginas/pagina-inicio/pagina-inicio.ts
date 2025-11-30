@@ -15,7 +15,9 @@ export class PaginaInicio{
 
   programadores: Programador[] = [];
 
-  constructor(private programService: Programadores) {
-    this.programadores = this.programService.getProgramadores();
+  constructor(private programService: Programadores) {}
+
+  async ngOnInit(): Promise<void> {
+    this.programadores = await this.programService.getProgramadores();
   }
 }

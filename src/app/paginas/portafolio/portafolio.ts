@@ -14,19 +14,20 @@ import { Proyecto } from '../../modelos/proyecto';
   styleUrl: './portafolio.scss',
 })
 export class Portafolio {
-   programador?: Programador;
 
-  constructor(private route: ActivatedRoute, private programadoresService: Programadores) {
+  programador?: Programador;
+  proyectosAcademicos: Proyecto[] = [];
+  proyectosLaborales: Proyecto[] = [];
+
+  constructor(
+    private route: ActivatedRoute,
+    private programadoresService: Programadores
+  ) {}
+
+  async ngOnInit(): Promise<void> {
     const idParam = this.route.snapshot.paramMap.get('id');
-    const id = idParam ? +idParam : 0; 
-    this.programador = this.programadoresService.getProgramadorById(id);
-  }
+    const id = idParam ? +idParam : 0;
 
-  get proyectosAcademicos(): Proyecto[] {
-    return this.programador?.proyectos.filter(p => p.seccion === 'academico') ?? [];
-  }
-
-  get proyectosLaborales(): Proyecto[] {
-    return this.programador?.proyectos.filter(p => p.seccion === 'laboral') ?? [];
+    this.programador = await this.programadoresService.getProgramadorById(id);
   }
 }

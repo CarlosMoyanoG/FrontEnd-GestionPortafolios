@@ -47,7 +47,6 @@
   </div>
 
   <div class="grid-gestion">
-    
     <div class="card panel-programadores">
       <div class="card-header">
         <h2>Gestión de programadores</h2>
@@ -166,6 +165,55 @@
         </div>
       </div>
     </div>
-
   </div>
+
+  <section class="seccion-usuarios">
+    <h2>Gestión de usuarios</h2>
+    <p>
+      Aquí el administrador puede asignar roles y vincular usuarios con un portafolio de programador.
+    </p>
+
+    <table class="tabla-usuarios">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Correo</th>
+          <th>Rol</th>
+          <th>Programador asignado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let u of usuarios">
+          <td>{{ u.nombre }}</td>
+          <td>{{ u.email || '—' }}</td>
+          <td>
+            <select [(ngModel)]="u.rol">
+              <option *ngFor="let r of rolesPosibles" [ngValue]="r">
+                {{ r }}
+              </option>
+            </select>
+          </td>
+          <td>
+            <ng-container *ngIf="u.rol === 'programador'; else noProg">
+              <select [(ngModel)]="u.programadorId">
+                <option [ngValue]="null">Sin asignar</option>
+                <option *ngFor="let p of programadores" [ngValue]="p.id">
+                  {{ p.nombre }} (id: {{ p.id }})
+                </option>
+              </select>
+            </ng-container>
+            <ng-template #noProg>
+              <span>—</span>
+            </ng-template>
+          </td>
+          <td>
+            <button (click)="guardarUsuario(u)">
+              Guardar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 </div>
