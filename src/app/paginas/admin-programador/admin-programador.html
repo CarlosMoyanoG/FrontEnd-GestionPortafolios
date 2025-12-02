@@ -1,360 +1,366 @@
-<div class="programmer-dashboard" *ngIf="programador; else sinProgramador">
-  <div class="dashboard-header">
+<div class="contenedor-panel">
+  <div class="encabezado-panel">
     <h1>Panel de programador</h1>
   </div>
 
-  <!-- PERFIL RESUMEN -->
-  <div class="card profile-card">
-    <div class="card-body profile-content">
-      <div class="avatar grande">
-        <ng-container *ngIf="programador?.fotoUrl; else iconoPanel">
-          <img
-            [src]="programador.fotoUrl"
-            [alt]="'Foto de ' + programador.nombre" />
-        </ng-container>
+  <div *ngIf="programador; else sinProgramador">
+    
+    <div class="tarjeta tarjeta-perfil">
+      <div class="cuerpo-tarjeta contenido-perfil">
+        <div class="contenedor-avatar">
+          <ng-container *ngIf="programador?.fotoUrl; else iconoPanel">
+            <img
+              class="imagen-avatar"
+              [src]="programador.fotoUrl"
+              [alt]="'Foto de ' + programador.nombre" />
+          </ng-container>
 
-        <ng-template #iconoPanel>
-          <div class="avatar-icon">
-            <i class="fas fa-user"></i>
-          </div>
-        </ng-template>
-      </div>
+          <ng-template #iconoPanel>
+            <div class="avatar-por-defecto">
+              <i class="fas fa-user"></i>
+            </div>
+          </ng-template>
+        </div>
 
-      <div class="profile-info">
-        <h2>{{ programador.nombre }}</h2>
-        <p class="especialidad">{{ programador.especialidad }}</p>
-        <p class="descripcion">{{ programador.descripcion }}</p>
+        <div class="info-perfil">
+          <h2>{{ programador.nombre }}</h2>
+          <p class="texto-especialidad">{{ programador.especialidad }}</p>
+          <p class="texto-descripcion">{{ programador.descripcion }}</p>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- MI PERFIL (EDICIÓN) -->
-  <div class="card profile-edit-card">
-    <div class="card-header">
-      <h2>Mi perfil</h2>
-    </div>
-    <div class="card-body">
-      <form (ngSubmit)="guardarPerfil()" #fPerfil="ngForm" class="form-estilizado">
-        <div class="form-row">
-          <div class="form-group">
-            <label>Nombre</label>
-            <input
-              type="text"
-              name="nombre"
-              [(ngModel)]="perfilForm.nombre"
-              [readonly]="!perfilEditando"
-              required />
+    <div class="tarjeta">
+      <div class="cabecera-tarjeta">
+        <h2>Mi perfil</h2>
+      </div>
+      <div class="cuerpo-tarjeta">
+        <form (ngSubmit)="guardarPerfil()" #fPerfil="ngForm" class="formulario-estilizado">
+          <div class="fila-formulario">
+            <div class="grupo-formulario">
+              <label>Nombre</label>
+              <input
+                type="text"
+                name="nombre"
+                [(ngModel)]="perfilForm.nombre"
+                [readonly]="!perfilEditando"
+                required />
+            </div>
+
+            <div class="grupo-formulario">
+              <label>Especialidad</label>
+              <input
+                type="text"
+                name="especialidad"
+                [(ngModel)]="perfilForm.especialidad"
+                [readonly]="!perfilEditando"
+                required />
+            </div>
           </div>
 
-          <div class="form-group">
-            <label>Especialidad</label>
-            <input
-              type="text"
-              name="especialidad"
-              [(ngModel)]="perfilForm.especialidad"
-              [readonly]="!perfilEditando"
-              required />
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>Descripción</label>
-          <textarea
-            name="descripcion"
-            rows="3"
-            [(ngModel)]="perfilForm.descripcion"
-            [readonly]="!perfilEditando">
-          </textarea>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label>Correo de contacto</label>
-            <input
-              type="email"
-              name="emailContacto"
-              [(ngModel)]="perfilForm.emailContacto"
-              [readonly]="!perfilEditando"
-              placeholder="ejemplo@correo.com" />
+          <div class="grupo-formulario">
+            <label>Descripción</label>
+            <textarea
+              name="descripcion"
+              rows="3"
+              [(ngModel)]="perfilForm.descripcion"
+              [readonly]="!perfilEditando">
+            </textarea>
           </div>
 
-          <div class="form-group">
-            <label>Sitio web / Portafolio personal</label>
-            <input
-              type="url"
-              name="sitioWeb"
-              [(ngModel)]="perfilForm.sitioWeb"
-              [readonly]="!perfilEditando"
-              placeholder="https://mi-sitio.dev" />
+          <div class="fila-formulario">
+            <div class="grupo-formulario">
+              <label>Correo de contacto</label>
+              <input
+                type="email"
+                name="emailContacto"
+                [(ngModel)]="perfilForm.emailContacto"
+                [readonly]="!perfilEditando"
+                placeholder="ejemplo@correo.com" />
+            </div>
+
+            <div class="grupo-formulario">
+              <label>Sitio web / Portafolio personal</label>
+              <input
+                type="url"
+                name="sitioWeb"
+                [(ngModel)]="perfilForm.sitioWeb"
+                [readonly]="!perfilEditando"
+                placeholder="https://mi-sitio.dev" />
+            </div>
           </div>
-        </div>
 
-        <div class="form-row">
-          <div class="form-group">
-            <label>GitHub</label>
-            <input
-              type="url"
-              name="githubUrl"
-              [(ngModel)]="perfilForm.githubUrl"
-              [readonly]="!perfilEditando"
-              placeholder="https://github.com/usuario" />
+          <div class="fila-formulario">
+            <div class="grupo-formulario">
+              <label>GitHub</label>
+              <input
+                type="url"
+                name="githubUrl"
+                [(ngModel)]="perfilForm.githubUrl"
+                [readonly]="!perfilEditando"
+                placeholder="https://github.com/usuario" />
+            </div>
+
+            <div class="grupo-formulario">
+              <label>LinkedIn</label>
+              <input
+                type="url"
+                name="linkedinUrl"
+                [(ngModel)]="perfilForm.linkedinUrl"
+                [readonly]="!perfilEditando"
+                placeholder="https://www.linkedin.com/in/usuario" />
+            </div>
           </div>
 
-          <div class="form-group">
-            <label>LinkedIn</label>
-            <input
-              type="url"
-              name="linkedinUrl"
-              [(ngModel)]="perfilForm.linkedinUrl"
-              [readonly]="!perfilEditando"
-              placeholder="https://www.linkedin.com/in/usuario" />
-          </div>
-        </div>
-
-        <div class="form-actions">
-          <button
-            type="button"
-            class="btn-guardar"
-            *ngIf="!perfilEditando"
-            (click)="editarPerfil()">
-            Editar perfil
-          </button>
-
-          <ng-container *ngIf="perfilEditando">
-            <button type="submit" class="btn-guardar" [disabled]="fPerfil.invalid">
-              Guardar cambios
-            </button>
+          <div class="acciones-formulario mt-3">
             <button
               type="button"
-              class="btn-cancelar"
-              (click)="cancelarEdicionPerfil()">
-              Cancelar
+              class="boton-primario"
+              *ngIf="!perfilEditando"
+              (click)="editarPerfil()">
+              Editar perfil
             </button>
-          </ng-container>
-        </div>
-      </form>
-    </div>
-  </div>
 
-  <!-- ASESORÍAS -->
-  <div class="card table-card">
-    <div class="card-header">
-      <h2>Mis asesorías agendadas</h2>
-    </div>
-
-    <div class="card-body table-responsive">
-      <table class="tabla-asesorias" *ngIf="asesorias.length; else sinAsesorias">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Cliente</th>
-            <th>Correo</th>
-            <th>Fecha</th>
-            <th>Hora</th>
-            <th>Estado</th>
-            <th>Descripción</th>
-            <th>Mensaje al cliente</th>
-            <th class="text-center">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let a of asesorias">
-            <td>{{ a.id }}</td>
-            <td><strong>{{ a.nombreCliente }}</strong></td>
-            <td>{{ a.emailCliente }}</td>
-            <td>{{ a.fecha }}</td>
-            <td>{{ a.hora }}</td>
-            <td>
-              <div class="select-wrapper">
-                <select [(ngModel)]="a.estado">
-                  <option *ngFor="let e of estadosPosibles" [ngValue]="e">
-                    {{ e | titlecase }}
-                  </option>
-                </select>
-              </div>
-            </td>
-            <td>
-              <div class="desc-truncada" title="{{a.descripcionProyecto}}">
-                {{ a.descripcionProyecto }}
-              </div>
-            </td>
-            <td>
-              <textarea
-                rows="2"
-                [(ngModel)]="a.mensajeRespuesta"
-                placeholder="Escribe un mensaje corto para el cliente...">
-              </textarea>
-            </td>
-            <td class="text-center">
-              <button (click)="actualizarEstado(a)" class="btn-guardar">
-                Guardar
+            <ng-container *ngIf="perfilEditando">
+              <button type="submit" class="boton-primario" [disabled]="fPerfil.invalid">
+                Guardar cambios
               </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <ng-template #sinAsesorias>
-        <div class="empty-state">
-          <p>Todavía no tienes asesorías agendadas.</p>
-        </div>
-      </ng-template>
-    </div>
-  </div>
-
-  <!-- TOAST -->
-  <div *ngIf="mensajeExito" class="toast-notification">
-    <div class="toast-content">
-      <i class="fas fa-check-circle"></i>
-      <span>{{ mensajeExito }}</span>
-    </div>
-  </div>
-
-  <!-- PROYECTOS -->
-  <div class="card table-card">
-    <div class="card-header">
-      <h2>Mis proyectos</h2>
+              <button
+                type="button"
+                class="boton-secundario"
+                (click)="cancelarEdicionPerfil()">
+                Cancelar
+              </button>
+            </ng-container>
+          </div>
+        </form>
+      </div>
     </div>
 
-    <div class="card-body">
-      <div class="tabla-proyectos" *ngIf="programador?.proyectos?.length; else sinProyectos">
-        <table class="tabla-asesorias">
+    <div class="tarjeta">
+      <div class="cabecera-tarjeta">
+        <h2>Mis asesorías agendadas</h2>
+      </div>
+
+      <div class="cuerpo-tarjeta contenedor-tabla">
+        <table class="tabla-minimalista" *ngIf="asesorias.length; else sinAsesorias">
           <thead>
             <tr>
-              <th>Nombre</th>
-              <th>Sección</th>
-              <th>Rol</th>
-              <th>Tecnologías</th>
-              <th>Enlaces</th>
-              <th class="text-center">Acciones</th>
+              <th>#</th>
+              <th>Cliente</th>
+              <th>Correo</th>
+              <th>Fecha</th>
+              <th>Hora</th>
+              <th>Estado</th>
+              <th>Descripción</th>
+              <th>Mensaje al cliente</th>
+              <th class="texto-centro" style="width: 100px;">Acciones</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let p of programador?.proyectos">
-              <td>{{ p.nombre }}</td>
-              <td>{{ p.seccion | titlecase }}</td>
-              <td>{{ p.participacion }}</td>
-              <td>{{ p.tecnologias.join(', ') }}</td>
+            <tr *ngFor="let a of asesorias">
+              <td>{{ a.id }}</td>
+              <td><strong>{{ a.nombreCliente }}</strong></td>
+              <td>{{ a.emailCliente }}</td>
+              <td>{{ a.fecha }}</td>
+              <td>{{ a.hora }}</td>
               <td>
-                <div class="links-proyecto">
-                  <a *ngIf="p.repoUrl" [href]="p.repoUrl" target="_blank">Repo</a>
-                  <a *ngIf="p.demoUrl" [href]="p.demoUrl" target="_blank">Demo</a>
+                <div class="contenedor-select-pequeno">
+                  <select [(ngModel)]="a.estado">
+                    <option *ngFor="let e of estadosPosibles" [ngValue]="e">
+                      {{ e | titlecase }}
+                    </option>
+                  </select>
                 </div>
               </td>
-              <td class="text-center">
-                <button (click)="editarProyecto(p)">Editar</button>
-                <button (click)="eliminarProyecto(p)">Eliminar</button>
+              <td>
+                <div class="texto-truncado" title="{{a.descripcionProyecto}}">
+                  {{ a.descripcionProyecto }}
+                </div>
+              </td>
+              <td>
+                <textarea
+                  class="input-tabla"
+                  rows="1"
+                  [(ngModel)]="a.mensajeRespuesta"
+                  placeholder="Responder...">
+                </textarea>
+              </td>
+              <td class="texto-centro">
+                <button (click)="actualizarEstado(a)" class="boton-accion-pequeno">
+                  Guardar
+                </button>
               </td>
             </tr>
           </tbody>
         </table>
+
+        <ng-template #sinAsesorias>
+          <div class="estado-vacio">
+            <p>Todavía no tienes asesorías agendadas.</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+
+    <div class="tarjeta">
+      <div class="cabecera-tarjeta">
+        <h2>Mis proyectos</h2>
       </div>
 
-      <ng-template #sinProyectos>
-        <p class="text-muted">
-          Aún no has registrado proyectos en tu portafolio.
-        </p>
-      </ng-template>
-
-      <hr class="separador" />
-
-      <h3>{{ editandoProyectoId == null ? 'Agregar nuevo proyecto' : 'Editar proyecto' }}</h3>
-
-      <form (ngSubmit)="guardarProyecto()" #fProj="ngForm" class="form-estilizado">
-        <div class="form-group">
-          <label>Nombre del proyecto</label>
-          <input
-            type="text"
-            name="nombreProyecto"
-            [(ngModel)]="nuevoProyecto.nombre"
-            required />
+      <div class="cuerpo-tarjeta">
+        <div class="contenedor-tabla" *ngIf="programador?.proyectos?.length; else sinProyectos">
+          <table class="tabla-minimalista">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Sección</th>
+                <th>Rol</th>
+                <th>Tecnologías</th>
+                <th>Enlaces</th>
+                <th class="texto-centro">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let p of programador?.proyectos">
+                <td><span class="texto-negrita">{{ p.nombre }}</span></td>
+                <td>{{ p.seccion | titlecase }}</td>
+                <td>{{ p.participacion }}</td>
+                <td>
+                    <span class="etiqueta-tecnologia">{{ p.tecnologias.join(', ') }}</span>
+                </td>
+                <td>
+                  <div class="enlaces-proyecto">
+                    <a *ngIf="p.repoUrl" [href]="p.repoUrl" target="_blank" class="enlace-icono">Repo</a>
+                    <a *ngIf="p.demoUrl" [href]="p.demoUrl" target="_blank" class="enlace-icono">Demo</a>
+                  </div>
+                </td>
+                <td class="texto-centro">
+                  <div class="acciones-en-linea">
+                      <button class="boton-texto" (click)="editarProyecto(p)">Editar</button>
+                      <button class="boton-texto boton-texto-peligro" (click)="eliminarProyecto(p)">Eliminar</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
-        <div class="form-group">
-          <label>Descripción</label>
-          <textarea
-            name="descripcionProyecto"
-            rows="3"
-            [(ngModel)]="nuevoProyecto.descripcion"
-            required>
-          </textarea>
+        <ng-template #sinProyectos>
+          <p class="estado-vacio">
+            Aún no has registrado proyectos en tu portafolio.
+          </p>
+        </ng-template>
+
+        <hr class="separador" />
+
+        <div class="seccion-formulario">
+            <h3>{{ editandoProyectoId == null ? 'Agregar nuevo proyecto' : 'Editar proyecto' }}</h3>
+
+            <form (ngSubmit)="guardarProyecto()" #fProj="ngForm" class="formulario-estilizado">
+            <div class="grupo-formulario">
+                <label>Nombre del proyecto</label>
+                <input
+                type="text"
+                name="nombreProyecto"
+                [(ngModel)]="nuevoProyecto.nombre"
+                required />
+            </div>
+
+            <div class="grupo-formulario">
+                <label>Descripción</label>
+                <textarea
+                name="descripcionProyecto"
+                rows="3"
+                [(ngModel)]="nuevoProyecto.descripcion"
+                required>
+                </textarea>
+            </div>
+
+            <div class="fila-formulario">
+                <div class="grupo-formulario">
+                <label>Sección</label>
+                <select
+                    name="seccion"
+                    [(ngModel)]="nuevoProyecto.seccion"
+                    required>
+                    <option *ngFor="let s of tiposSeccion" [ngValue]="s">
+                    {{ s | titlecase }}
+                    </option>
+                </select>
+                </div>
+
+                <div class="grupo-formulario">
+                <label>Rol / Participación</label>
+                <select
+                    name="participacion"
+                    [(ngModel)]="nuevoProyecto.participacion"
+                    required>
+                    <option *ngFor="let p of tiposParticipacion" [ngValue]="p">
+                    {{ p }}
+                    </option>
+                </select>
+                </div>
+            </div>
+
+            <div class="grupo-formulario">
+                <label>Tecnologías (separadas por coma)</label>
+                <input
+                type="text"
+                name="tecnologias"
+                [(ngModel)]="tecnologiasTexto"
+                placeholder="Ej. Angular, Firebase, Tailwind" />
+            </div>
+
+            <div class="fila-formulario">
+                <div class="grupo-formulario">
+                <label>URL del repositorio (opcional)</label>
+                <input
+                    type="url"
+                    name="repoUrl"
+                    [(ngModel)]="nuevoProyecto.repoUrl"
+                    placeholder="https://github.com/..." />
+                </div>
+
+                <div class="grupo-formulario">
+                <label>URL de demo (opcional)</label>
+                <input
+                    type="url"
+                    name="demoUrl"
+                    [(ngModel)]="nuevoProyecto.demoUrl"
+                    placeholder="https://..." />
+                </div>
+            </div>
+
+            <div class="acciones-formulario mt-3">
+                <button type="submit" [disabled]="fProj.invalid" class="boton-primario">
+                {{ editandoProyectoId == null ? 'Guardar proyecto' : 'Actualizar proyecto' }}
+                </button>
+
+                <button
+                type="button"
+                *ngIf="editandoProyectoId != null"
+                (click)="cancelarEdicion()"
+                class="boton-secundario">
+                Cancelar
+                </button>
+            </div>
+            </form>
         </div>
+      </div>
+    </div>
+  </div>
 
-        <div class="form-row">
-          <div class="form-group">
-            <label>Sección</label>
-            <select
-              name="seccion"
-              [(ngModel)]="nuevoProyecto.seccion"
-              required>
-              <option *ngFor="let s of tiposSeccion" [ngValue]="s">
-                {{ s | titlecase }}
-              </option>
-            </select>
-          </div>
+  <ng-template #sinProgramador>
+    <div class="contenedor-error">
+      <p>No se encontró información del programador actual.</p>
+    </div>
+  </ng-template>
 
-          <div class="form-group">
-            <label>Rol / Participación</label>
-            <select
-              name="participacion"
-              [(ngModel)]="nuevoProyecto.participacion"
-              required>
-              <option *ngFor="let p of tiposParticipacion" [ngValue]="p">
-                {{ p }}
-              </option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>Tecnologías (separadas por coma)</label>
-          <input
-            type="text"
-            name="tecnologias"
-            [(ngModel)]="tecnologiasTexto"
-            placeholder="Ej. Angular, Firebase, Tailwind" />
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label>URL del repositorio (opcional)</label>
-            <input
-              type="url"
-              name="repoUrl"
-              [(ngModel)]="nuevoProyecto.repoUrl"
-              placeholder="https://github.com/..." />
-          </div>
-
-          <div class="form-group">
-            <label>URL de demo (opcional)</label>
-            <input
-              type="url"
-              name="demoUrl"
-              [(ngModel)]="nuevoProyecto.demoUrl"
-              placeholder="https://..." />
-          </div>
-        </div>
-
-        <div class="form-actions">
-          <button type="submit" [disabled]="fProj.invalid" class="btn-guardar">
-            {{ editandoProyectoId == null ? 'Guardar proyecto' : 'Actualizar proyecto' }}
-          </button>
-
-          <button
-            type="button"
-            *ngIf="editandoProyectoId != null"
-            (click)="cancelarEdicion()"
-            class="btn-cancelar">
-            Cancelar
-          </button>
-        </div>
-      </form>
+  <div *ngIf="mensajeExito" class="notificacion-emergente">
+    <div class="contenido-notificacion">
+      <i class="fas fa-check-circle"></i>
+      <span>{{ mensajeExito }}</span>
     </div>
   </div>
 </div>
-
-<ng-template #sinProgramador>
-  <div class="error-container">
-    <p>No se encontró información del programador actual.</p>
-  </div>
-</ng-template>

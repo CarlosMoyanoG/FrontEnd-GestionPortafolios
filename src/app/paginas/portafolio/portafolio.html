@@ -1,72 +1,115 @@
-<div *ngIf="programador as prog; else noEncontrado">
+<div class="contenedor-detalle" *ngIf="programador as prog; else noEncontrado">
 
-  <div class="avatar grande">
-     <ng-container *ngIf="prog.fotoUrl; else iconoPub">
-        <img
-          [src]="prog.fotoUrl"
-          [alt]="'Foto de ' + prog.nombre" />
-      </ng-container>
+  <div class="tarjeta-perfil">
+    <div class="contenedor-avatar">
+       <ng-container *ngIf="prog.fotoUrl; else iconoPub">
+          <img
+            class="imagen-avatar"
+            [src]="prog.fotoUrl"
+            [alt]="'Foto de ' + prog.nombre" />
+       </ng-container>
 
-      <ng-template #iconoPub>
-        <div class="avatar-icon">
-          <i class="fas fa-user"></i>
-        </div>
-      </ng-template>
+       <ng-template #iconoPub>
+          <div class="avatar-por-defecto">
+            <i class="fas fa-user"></i>
+          </div>
+       </ng-template>
+    </div>
+
+    <h1 class="titulo-nombre">{{ prog.nombre }}</h1>
+    <p class="texto-especialidad">{{ prog.especialidad }}</p>
+    <p class="texto-descripcion">{{ prog.descripcion }}</p>
+    
+    <div class="acciones-perfil">
+        <a *ngIf="prog.emailContacto" [href]="'mailto:' + prog.emailContacto" class="boton-contacto">
+            Contactar
+        </a>
+    </div>
   </div>
 
-  <h1>{{ prog.nombre }}</h1>
-  <p class="especialidad">{{ prog.especialidad }}</p>
-  <p class="descripcion">{{ prog.descripcion }}</p>
+  <div class="contenedor-proyectos">
+    
+    <section class="seccion-categoria" *ngIf="proyectosAcademicos.length">
+      <h2 class="titulo-seccion">Proyectos académicos</h2>
+      <div class="cuadricula-proyectos">
+        <article class="tarjeta-proyecto" *ngFor="let proyecto of proyectosAcademicos">
+          <div class="cabecera-proyecto">
+             <h3>{{ proyecto.nombre }}</h3>
+          </div>
+          <div class="cuerpo-proyecto">
+             <p class="desc-proyecto">{{ proyecto.descripcion }}</p>
+             
+             <div class="dato-proyecto">
+               <strong>Rol:</strong> <span>{{ proyecto.participacion }}</span>
+             </div>
+             
+             <div class="dato-proyecto">
+               <strong>Tecnologías:</strong>
+               <div class="lista-tecnologias">
+                 <span class="etiqueta-tech" *ngFor="let tech of proyecto.tecnologias">
+                   {{ tech }}
+                 </span>
+               </div>
+             </div>
+          </div>
+          
+          <div class="pie-proyecto" *ngIf="proyecto.repoUrl || proyecto.demoUrl">
+             <a *ngIf="proyecto.repoUrl" [href]="proyecto.repoUrl" target="_blank" class="enlace-proyecto">
+                <i class="fab fa-github"></i> Repo
+             </a>
+             <a *ngIf="proyecto.demoUrl" [href]="proyecto.demoUrl" target="_blank" class="enlace-proyecto">
+                <i class="fas fa-external-link-alt"></i> Demo
+             </a>
+          </div>
+        </article>
+      </div>
+    </section>
 
-  <h2>Proyectos académicos</h2>
-  <ul>
-    <li *ngFor="let proyecto of proyectosAcademicos">
-      <h3>{{ proyecto.nombre }}</h3>
-      <p>{{ proyecto.descripcion }}</p>
-      <p><strong>Rol:</strong> {{ proyecto.participacion }}</p>
-      <p><strong>Tecnologías:</strong> {{ proyecto.tecnologias.join(', ') }}</p>
+    <hr class="separador" *ngIf="proyectosAcademicos.length && proyectosLaborales.length">
 
-      <p *ngIf="proyecto.repoUrl">
-        Repo:
-        <a [href]="proyecto.repoUrl" target="_blank">
-          {{ proyecto.repoUrl }}
-        </a>
-      </p>
+    <section class="seccion-categoria" *ngIf="proyectosLaborales.length">
+      <h2 class="titulo-seccion">Proyectos laborales</h2>
+      <div class="cuadricula-proyectos">
+        <article class="tarjeta-proyecto" *ngFor="let proyecto of proyectosLaborales">
+          <div class="cabecera-proyecto">
+             <h3>{{ proyecto.nombre }}</h3>
+          </div>
+          <div class="cuerpo-proyecto">
+             <p class="desc-proyecto">{{ proyecto.descripcion }}</p>
+             
+             <div class="dato-proyecto">
+               <strong>Rol:</strong> <span>{{ proyecto.participacion }}</span>
+             </div>
+             
+             <div class="dato-proyecto">
+               <strong>Tecnologías:</strong>
+               <div class="lista-tecnologias">
+                 <span class="etiqueta-tech" *ngFor="let tech of proyecto.tecnologias">
+                   {{ tech }}
+                 </span>
+               </div>
+             </div>
+          </div>
+          
+          <div class="pie-proyecto" *ngIf="proyecto.repoUrl || proyecto.demoUrl">
+             <a *ngIf="proyecto.repoUrl" [href]="proyecto.repoUrl" target="_blank" class="enlace-proyecto">
+                <i class="fab fa-github"></i> Repo
+             </a>
+             <a *ngIf="proyecto.demoUrl" [href]="proyecto.demoUrl" target="_blank" class="enlace-proyecto">
+                <i class="fas fa-external-link-alt"></i> Demo
+             </a>
+          </div>
+        </article>
+      </div>
+    </section>
 
-      <p *ngIf="proyecto.demoUrl">
-        Demo:
-        <a [href]="proyecto.demoUrl" target="_blank">
-          {{ proyecto.demoUrl }}
-        </a>
-      </p>
-    </li>
-  </ul>
+  </div>
 
-  <h2>Proyectos laborales</h2>
-  <ul>
-    <li *ngFor="let proyecto of proyectosLaborales">
-      <h3>{{ proyecto.nombre }}</h3>
-      <p>{{ proyecto.descripcion }}</p>
-      <p><strong>Rol:</strong> {{ proyecto.participacion }}</p>
-      <p><strong>Tecnologías:</strong> {{ proyecto.tecnologias.join(', ') }}</p>
-
-      <p *ngIf="proyecto.repoUrl">
-        Repo:
-        <a [href]="proyecto.repoUrl" target="_blank">
-          {{ proyecto.repoUrl }}
-        </a>
-      </p>
-
-      <p *ngIf="proyecto.demoUrl">
-        Demo:
-        <a [href]="proyecto.demoUrl" target="_blank">
-          {{ proyecto.demoUrl }}
-        </a>
-      </p>
-    </li>
-  </ul>
 </div>
 
 <ng-template #noEncontrado>
-  <p>Programador no encontrado.</p>
+  <div class="contenedor-error">
+     <p>Programador no encontrado.</p>
+     <a routerLink="/pagina-inicio" class="enlace-volver">Volver al inicio</a>
+  </div>
 </ng-template>

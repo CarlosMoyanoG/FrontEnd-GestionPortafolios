@@ -1,18 +1,18 @@
-<div class="agenda-container">
-  <div class="card form-card">
-    <div class="card-header">
+<div class="contenedor-agenda">
+  <div class="tarjeta tarjeta-formulario">
+    <div class="cabecera-tarjeta">
       <h1>Agendar Asesoría</h1>
       <p class="subtitulo">
         Completa el siguiente formulario para solicitar una asesoría con uno de nuestros programadores.
       </p>
     </div>
 
-    <form (ngSubmit)="onSubmit()" #f="ngForm" class="form-asesoria">
+    <form (ngSubmit)="onSubmit()" #f="ngForm" class="formulario-asesoria">
 
-      <div class="form-group">
+      <div class="grupo-formulario">
         <label>Programador</label>
-        <div class="select-wrapper">
-          <select name="programadorId" [(ngModel)]="form.programadorId" (ngModelChange)="onProgramadorChange($event)" required>
+        <div class="contenedor-select">
+          <select name="programadorId" [(ngModel)]="form.programadorId" (ngModelChange)="cambiosProgramador($event)" required>
             <option [ngValue]="0" disabled>Selecciona un programador</option>
             <option *ngFor="let prog of programadores" [ngValue]="prog.id">
               {{ prog.nombre }} – {{ prog.especialidad }}
@@ -21,13 +21,13 @@
         </div>
       </div>
 
-      <div class="form-group" *ngIf="disponibilidadesProgramador.length">
+      <div class="grupo-formulario" *ngIf="disponibilidadesProgramador.length">
         <label>Horarios disponibles</label>
-        <div class="select-wrapper">
+        <div class="contenedor-select">
           <select
             name="slotId"
             [(ngModel)]="selectedSlotId"
-            (ngModelChange)="onSlotChange($event)"
+            (ngModelChange)="cambiosSlots($event)"
           >
             <option [ngValue]="0">Selecciona un horario</option>
             <option *ngFor="let d of disponibilidadesProgramador" [ngValue]="d.id">
@@ -35,7 +35,7 @@
             </option>
           </select>
         </div>
-        <small>
+        <small class="texto-ayuda">
           Al elegir un horario se rellenarán automáticamente la fecha y la hora de la asesoría.
         </small>
       </div>
@@ -45,8 +45,8 @@
         Por favor elige otro programador o vuelve más tarde.
       </div>
 
-      <div class="form-row">
-        <div class="form-group">
+      <div class="fila-formulario">
+        <div class="grupo-formulario">
           <label>Tu nombre</label>
           <input
             type="text"
@@ -57,7 +57,7 @@
           />
         </div>
 
-        <div class="form-group">
+        <div class="grupo-formulario">
           <label>Correo electrónico</label>
           <input
             type="email"
@@ -69,8 +69,8 @@
         </div>
       </div>
 
-      <div class="form-row">
-        <div class="form-group">
+      <div class="fila-formulario">
+        <div class="grupo-formulario">
           <label>Fecha</label>
           <input
             type="date"
@@ -80,7 +80,7 @@
           />
         </div>
 
-        <div class="form-group">
+        <div class="grupo-formulario">
           <label>Hora</label>
           <input
             type="time"
@@ -91,7 +91,7 @@
         </div>
       </div>
 
-      <div class="form-group">
+      <div class="grupo-formulario">
         <label>Describe brevemente tu proyecto</label>
         <textarea
           name="descripcionProyecto"
@@ -102,14 +102,14 @@
         ></textarea>
       </div>
 
-      <div class="form-footer">
-        <button type="submit" [disabled]="f.invalid || sinHorarios">
+      <div class="pie-formulario">
+        <button type="submit" class="boton-enviar" [disabled]="f.invalid || sinHorarios">
           Enviar solicitud
         </button>
       </div>
     </form>
 
-    <div *ngIf="mensajeExito" class="mensaje-container">
+    <div *ngIf="mensajeExito" class="contenedor-mensaje">
       <p class="mensaje-exito">
         <i class="fas fa-check-circle"></i> {{ mensajeExito }}
       </p>

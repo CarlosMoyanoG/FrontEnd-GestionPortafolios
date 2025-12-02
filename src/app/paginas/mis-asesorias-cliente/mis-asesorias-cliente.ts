@@ -49,14 +49,9 @@ export class MisAsesoriasCliente implements OnInit {
       };
     });
 
-    // Ordenar por id descendente (las más recientes primero)
     lista.sort((a, b) => b.id - a.id);
-
     this.asesoriasCliente = lista;
-
-    // Notificaciones = asesorías que ya no están pendientes
     this.notificacionesRecientes = lista.filter(a => a.estado !== 'pendiente');
-
     this.cargando = false;
   }
 }

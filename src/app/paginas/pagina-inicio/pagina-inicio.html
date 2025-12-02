@@ -1,33 +1,38 @@
-<div class="portfolio-container">
-  <div class="header-section">
+<div class="contenedor-portafolio">
+  <div class="seccion-encabezado">
     <h1>Portafolio de Servicios</h1>
     <p class="subtitulo">
       Encuentra aquí los perfiles de nuestros programadores y agenda una asesoría según las necesidades de tu proyecto.
     </p>
   </div>
 
-  <section class="tarjetas">
+  <section class="cuadricula-tarjetas">
     <article class="tarjeta" *ngFor="let prog of programadores">
       
-      <div class="tarjeta-header">
-        <div class="avatar chico">
+      <div class="cabecera-tarjeta">
+        <div class="contenedor-avatar">
           <ng-container *ngIf="prog.fotoUrl; else iconoProgramador">
             <img
               [src]="prog.fotoUrl"
               [alt]="'Foto de ' + prog.nombre" />
           </ng-container>
           <ng-template #iconoProgramador>
-            <div class="avatar-icon">
+            <div class="avatar-icono">
               <i class="fas fa-user"></i>
             </div>
           </ng-template>
         </div>
+        
+        <div class="info-cabecera">
+          <h2>{{ prog.nombre }}</h2>
+          <p class="texto-especialidad">{{ prog.especialidad }}</p>
+        </div>
       </div>
 
-      <div class="tarjeta-body">
-        <p class="descripcion">{{ prog.descripcion }}</p>
+      <div class="cuerpo-tarjeta">
+        <p class="texto-descripcion">{{ prog.descripcion }}</p>
 
-        <div class="links-contacto" *ngIf="prog.emailContacto || prog.githubUrl || prog.linkedinUrl">
+        <div class="enlaces-contacto" *ngIf="prog.emailContacto || prog.githubUrl || prog.linkedinUrl">
           <a *ngIf="prog.emailContacto" [href]="'mailto:' + prog.emailContacto" title="Enviar Email">
             <i class="fas fa-envelope"></i>
           </a>
@@ -39,7 +44,7 @@
           </a>
         </div>
 
-        <div class="proyectos-section">
+        <div class="seccion-proyectos" *ngIf="prog.proyectos && prog.proyectos.length">
           <h3>Proyectos destacados</h3>
           <ul>
             <li *ngFor="let proyecto of prog.proyectos">
@@ -49,8 +54,8 @@
         </div>
       </div>
 
-      <div class="tarjeta-footer">
-        <button [routerLink]="['/portafolios', prog.id]">
+      <div class="pie-tarjeta">
+        <button class="boton-ver" [routerLink]="['/portafolios', prog.id]">
           Ver portafolio completo
         </button>
       </div>

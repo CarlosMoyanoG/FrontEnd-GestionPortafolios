@@ -1,23 +1,22 @@
-<div class="mis-asesorias-container" *ngIf="!cargando; else cargandoTpl">
+<div class="contenedor-mis-asesorias" *ngIf="!cargando; else cargandoTpl">
   <h1>Mis asesorías y notificaciones</h1>
 
   <ng-container *ngIf="emailClienteActual; else sinEmailTpl">
 
-    <!-- NOTIFICACIONES RECIENTES -->
-    <div class="card" *ngIf="notificacionesRecientes.length; else sinNotificacionesTpl">
-      <div class="card-header">
+    <div class="tarjeta" *ngIf="notificacionesRecientes.length; else sinNotificacionesTpl">
+      <div class="cabecera-tarjeta">
         <h2>Notificaciones recientes</h2>
         <p class="subtitulo">
           Aquí ves las últimas respuestas de los programadores a tus solicitudes.
         </p>
       </div>
-      <div class="card-body">
+      <div class="cuerpo-tarjeta">
         <ul class="lista-notificaciones">
           <li *ngFor="let a of notificacionesRecientes">
             <div class="fila-notificacion">
-              <div>
+              <div class="encabezado-notificacion">
                 <strong>{{ a.nombreProgramador }}</strong>
-                <span class="badge" [ngClass]="a.estado">
+                <span class="insignia" [ngClass]="a.estado">
                   {{ a.estado | titlecase }}
                 </span>
                 <span class="detalle-fecha">
@@ -40,18 +39,17 @@
     </div>
 
     <ng-template #sinNotificacionesTpl>
-      <p class="texto-muted">
-        Aún no tienes notificaciones (ninguna asesoría ha sido aprobada o rechazada).
-      </p>
+      <div class="estado-vacio">
+        <p>Aún no tienes notificaciones (ninguna asesoría ha sido aprobada o rechazada).</p>
+      </div>
     </ng-template>
 
-    <!-- HISTORIAL COMPLETO -->
-    <div class="card tabla-historial" *ngIf="asesoriasCliente.length; else sinAsesoriasTpl">
-      <div class="card-header">
+    <div class="tarjeta tabla-historial" *ngIf="asesoriasCliente.length; else sinAsesoriasTpl">
+      <div class="cabecera-tarjeta">
         <h2>Historial de asesorías</h2>
       </div>
-      <div class="card-body table-responsive">
-        <table class="tabla-asesorias">
+      <div class="cuerpo-tarjeta contenedor-tabla">
+        <table class="tabla-mis-asesorias">
           <thead>
             <tr>
               <th>#</th>
@@ -70,7 +68,7 @@
               <td>{{ a.fecha }}</td>
               <td>{{ a.hora }}</td>
               <td>
-                <span class="badge" [ngClass]="a.estado">
+                <span class="insignia" [ngClass]="a.estado">
                   {{ a.estado | titlecase }}
                 </span>
               </td>
@@ -79,11 +77,11 @@
                   {{ a.mensajeRespuesta }}
                 </ng-container>
                 <ng-template #sinMensajeTpl>
-                  <span class="texto-muted">Sin mensaje</span>
+                  <span class="texto-tenue">Sin mensaje</span>
                 </ng-template>
               </td>
               <td>
-                <div class="desc-truncada" [title]="a.descripcionProyecto">
+                <div class="texto-truncado" [title]="a.descripcionProyecto">
                   {{ a.descripcionProyecto }}
                 </div>
               </td>
@@ -94,20 +92,22 @@
     </div>
 
     <ng-template #sinAsesoriasTpl>
-      <p class="texto-muted">
-        Todavía no has agendado ninguna asesoría.
-      </p>
+      <div class="estado-vacio">
+        <p>Todavía no has agendado ninguna asesoría.</p>
+      </div>
     </ng-template>
 
   </ng-container>
 
   <ng-template #sinEmailTpl>
-    <p class="texto-muted">
-      Debes iniciar sesión para ver tus asesorías y notificaciones.
-    </p>
+    <div class="estado-vacio">
+      <p>Debes iniciar sesión para ver tus asesorías y notificaciones.</p>
+    </div>
   </ng-template>
 </div>
 
 <ng-template #cargandoTpl>
-  <p class="texto-muted">Cargando tus asesorías...</p>
+  <div class="cargando-contenedor">
+    <p>Cargando tus asesorías...</p>
+  </div>
 </ng-template>

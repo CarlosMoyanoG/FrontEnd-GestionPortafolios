@@ -1,64 +1,82 @@
-.form-card {
-  background-color: #ffffff;
-  border-radius: 12px;
-  padding: 2.5rem;
-  margin: 0 auto;       
-  margin-top: 0;       
+.contenedor-agenda {
+  padding: 2rem;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
 
-.card-header {
+.tarjeta-formulario {
+  background-color: #ffffff;
+  border-radius: 8px; 
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 700px; 
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+}
+
+.cabecera-tarjeta {
   margin-bottom: 2rem;
   text-align: center;
 }
 
 h1 {
-  color: #142433; 
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+  font-size: 1.8rem;
 }
 
 .subtitulo {
-  color: #295264; 
+  color: #6b7280; 
   margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
-.form-asesoria {
+.formulario-asesoria {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-.form-row {
+.fila-formulario {
   display: flex;
   gap: 1.5rem;
+  flex-wrap: wrap; 
 }
 
-.form-group {
+.grupo-formulario {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   flex: 1;
+  min-width: 250px;
 }
 
 label {
   font-weight: 600;
-  color: #142433;
+  color: #374151;
+  font-size: 0.9rem;
 }
 
 input, select, textarea {
   padding: 0.75rem 1rem;
-  border-radius: 8px;
+  border-radius: 6px;
   border: 1px solid #d1d5db; 
-  color: #142433;
+  color: #1f2937;
   background-color: #fff;
   transition: all 0.2s ease;
   font-family: inherit;
+  font-size: 0.95rem;
   width: 100%;
   box-sizing: border-box;
 }
 
 input:focus, select:focus, textarea:focus {
   outline: none;
-  border-color: #89373d;
-  box-shadow: 0 0 0 3px rgba(189, 47, 40, 0.1);
+  border-color: #89373d; 
+  box-shadow: 0 0 0 3px rgba(137, 55, 61, 0.1);
 }
 
 textarea {
@@ -66,52 +84,74 @@ textarea {
   min-height: 100px;
 }
 
-.form-footer {
+.contenedor-select {
+  position: relative;
+}
+
+.texto-ayuda {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-top: 0.2rem;
+}
+
+.alerta-horarios {
+  padding: 1rem;
+  background-color: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.pie-formulario {
   margin-top: 1rem;
   text-align: center; 
 }
 
-button[type='submit'] {
-  padding: 0.8rem 2rem;
-  border-radius: 8px;
+.boton-enviar {
+  padding: 0.8rem 2.5rem;
+  border-radius: 6px;
   border: none;
   cursor: pointer;
   background-color: #89373d;
   color: #fff;
   font-weight: 600;
-  transition: background-color 0.3s ease, transform 0.2s;
-  box-shadow: 0 2px 4px rgba(189, 47, 40, 0.2);
-  justify-content: center;
-  font-size: 0.95rem;
+  transition: background-color 0.2s ease, transform 0.1s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-size: 1rem;
 }
 
-button[type='submit']:hover:not(:disabled) {
-  background-color: #89373d; 
+.boton-enviar:hover:not(:disabled) {
+  background-color: #702a30; 
   transform: translateY(-1px);
 }
 
-button[type='submit']:disabled {
+.boton-enviar:disabled {
   background-color: #fabebc;
-  color: #fff;
   cursor: not-allowed;
   box-shadow: none;
 }
 
-.mensaje-container {
+.contenedor-mensaje {
   margin-top: 1.5rem;
   padding: 1rem;
   background-color: #d1fae5; 
   border: 1px solid #a7f3d0;
-  border-radius: 8px;
+  border-radius: 6px;
   text-align: center;
 }
 
 .mensaje-exito {
   color: #065f46;
-  font-weight: 500;
+  font-weight: 600;
   margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  
+  i {
+    font-size: 1.1rem;
+  }
 }

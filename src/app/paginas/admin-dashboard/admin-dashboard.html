@@ -1,13 +1,12 @@
-<div class="dashboard-container">
+<div class="contenedor-panel">
   <h1>Panel de administrador</h1>
 
-  <!-- ASESORÍAS -->
-  <div class="card panel-asesorias">
-    <div class="card-header">
+  <div class="tarjeta panel-asesorias">
+    <div class="cabecera-tarjeta">
       <h2>Asesorías agendadas</h2>
     </div>
     
-    <div class="card-body table-responsive">
+    <div class="cuerpo-tarjeta contenedor-tabla">
       <table class="tabla-asesorias" *ngIf="asesorias.length; else sinAsesorias">
         <thead>
           <tr>
@@ -31,7 +30,7 @@
             <td>{{ a.fecha }}</td>
             <td>{{ a.hora }}</td>
             <td>
-              <span class="badge" [ngClass]="a.estado">
+              <span class="insignia" [ngClass]="a.estado">
                 {{ a.estado | titlecase }}
               </span>
             </td>
@@ -42,28 +41,27 @@
       </table>
 
       <ng-template #sinAsesorias>
-        <div class="empty-state">
+        <div class="estado-vacio">
           <p>Todavía no hay asesorías agendadas.</p>
         </div>
       </ng-template>
     </div>
   </div>
 
-  <div class="grid-gestion">
-    <!-- GESTIÓN DE PROGRAMADORES -->
-    <div class="card panel-programadores">
-      <div class="card-header">
+  <div class="cuadricula-gestion">
+    <div class="tarjeta panel-programadores">
+      <div class="cabecera-tarjeta">
         <h2>Gestión de programadores</h2>
       </div>
       
-      <div class="card-body">
-        <div class="form-section">
+      <div class="cuerpo-tarjeta">
+        <div class="seccion-formulario">
           <h3>
             {{ programadorEditandoId === null ? 'Registrar nuevo programador' : 'Editar programador' }}
           </h3>
 
-          <form (ngSubmit)="crearProgramador()" #fProg="ngForm" class="form-estilizado">
-            <div class="form-group">
+          <form (ngSubmit)="crearProgramador()" #fProg="ngForm" class="formulario-estilizado">
+            <div class="grupo-formulario">
               <label>Nombre</label>
               <input
                 type="text"
@@ -73,7 +71,7 @@
               />
             </div>
 
-            <div class="form-group">
+            <div class="grupo-formulario">
               <label>Especialidad</label>
               <input
                 type="text"
@@ -83,7 +81,7 @@
               />
             </div>
 
-            <div class="form-group">
+            <div class="grupo-formulario">
               <label>Descripción</label>
               <textarea
                 name="descripcion"
@@ -93,7 +91,7 @@
               ></textarea>
             </div>
 
-            <div class="form-group">
+            <div class="grupo-formulario">
               <label>Correo de contacto</label>
               <input type="email"
                     name="emailContacto"
@@ -101,7 +99,7 @@
                     placeholder="ejemplo@correo.com" />
             </div>
 
-            <div class="form-group">
+            <div class="grupo-formulario">
               <label>GitHub (opcional)</label>
               <input type="url"
                     name="githubUrl"
@@ -109,7 +107,7 @@
                     placeholder="https://github.com/usuario" />
             </div>
 
-            <div class="form-group">
+            <div class="grupo-formulario">
               <label>LinkedIn (opcional)</label>
               <input type="url"
                     name="linkedinUrl"
@@ -117,7 +115,7 @@
                     placeholder="https://www.linkedin.com/in/usuario" />
             </div>
 
-            <div class="form-group">
+            <div class="grupo-formulario">
               <label>Sitio web / Portafolio personal (opcional)</label>
               <input type="url"
                     name="sitioWeb"
@@ -126,13 +124,13 @@
             </div>
 
 
-            <button type="submit" [disabled]="fProg.invalid" class="btn-primary">
+            <button type="submit" [disabled]="fProg.invalid" class="boton-primario">
               {{ programadorEditandoId === null ? 'Guardar programador' : 'Actualizar programador' }}
             </button>
 
             <button
               type="button"
-              class="btn-secundario"
+              class="boton-secundario"
               *ngIf="programadorEditandoId !== null"
               (click)="cancelarEdicionProgramador()"
             >
@@ -143,21 +141,21 @@
 
         <hr class="separador" />
 
-        <div class="lista-section">
+        <div class="seccion-lista">
           <h3>Programadores registrados</h3>
           <ul class="lista-items">
             <li *ngFor="let p of programadores">
-              <div class="item-info">
+              <div class="info-item">
                 <strong>{{ p.nombre }}</strong>
-                <span class="badge-light">{{ p.especialidad }}</span>
+                <span class="insignia-clara">{{ p.especialidad }}</span>
               </div>
-              <p class="texto-pequeño">{{ p.descripcion }}</p>
+              <p class="texto-pequeno">{{ p.descripcion }}</p>
 
               <div class="acciones-programador">
-                <button type="button" (click)="editarProgramador(p)">
+                <button type="button" class="boton-texto" (click)="editarProgramador(p)">
                   Editar
                 </button>
-                <button type="button" (click)="eliminarProgramador(p)">
+                <button type="button" class="boton-texto boton-texto-peligro" (click)="eliminarProgramador(p)">
                   Eliminar
                 </button>
               </div>
@@ -167,21 +165,20 @@
       </div>
     </div>
 
-    <!-- HORARIOS -->
-    <div class="card panel-horarios">
-      <div class="card-header">
+    <div class="tarjeta panel-horarios">
+      <div class="cabecera-tarjeta">
         <h2>Horarios de disponibilidad</h2>
       </div>
 
-      <div class="card-body">
+      <div class="cuerpo-tarjeta">
         <p *ngIf="mensajeDisponibilidad" class="mensaje-exito">
           {{ mensajeDisponibilidad }}
         </p>
 
-        <div class="form-section">
+        <div class="seccion-formulario">
           <h3>Registrar horario</h3>
-          <form (ngSubmit)="crearDisponibilidad()" #fDisp="ngForm" class="form-estilizado">
-            <div class="form-group">
+          <form (ngSubmit)="crearDisponibilidad()" #fDisp="ngForm" class="formulario-estilizado">
+            <div class="grupo-formulario">
               <label>Programador</label>
               <select
                 name="programadorId"
@@ -195,8 +192,8 @@
               </select>
             </div>
 
-            <div class="form-row">
-              <div class="form-group">
+            <div class="fila-formulario">
+              <div class="grupo-formulario">
                 <label>Fecha</label>
                 <input
                   type="date"
@@ -205,7 +202,7 @@
                   required
                 />
               </div>
-              <div class="form-group">
+              <div class="grupo-formulario">
                 <label>Hora</label>
                 <input
                   type="time"
@@ -216,7 +213,7 @@
               </div>
             </div>
 
-            <button type="submit" [disabled]="fDisp.invalid" class="btn-primary">
+            <button type="submit" [disabled]="fDisp.invalid" class="boton-primario">
               Guardar horario
             </button>
           </form>
@@ -224,9 +221,9 @@
 
         <hr class="separador" />
 
-        <div class="lista-section">
+        <div class="seccion-lista">
           <h3>Horarios registrados</h3>
-          <div class="table-responsive-small">
+          <div class="contenedor-tabla-pequena">
             <table class="tabla-simple" *ngIf="disponibilidades.length; else sinHorarios">
               <thead>
                 <tr>
@@ -248,61 +245,66 @@
           </div>
           
           <ng-template #sinHorarios>
-            <p class="text-muted">Aún no se han registrado horarios.</p>
+            <p class="texto-tenue">Aún no se han registrado horarios.</p>
           </ng-template>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- GESTIÓN DE USUARIOS -->
-  <section class="seccion-usuarios">
-    <h2>Gestión de usuarios</h2>
-    <p>
-      Administrador puede asignar roles y vincular usuarios con un portafolio de programador.
-    </p>
+  <div class="tarjeta panel-usuarios">
+    <div class="cabecera-tarjeta">
+      <h2>Gestión de usuarios</h2>
+    </div>
+    <div class="cuerpo-tarjeta">
+        <p class="texto-descripcion">
+            Administra roles y vincula usuarios con un perfil de programador.
+        </p>
 
-    <table class="tabla-usuarios">
-      <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Correo</th>
-          <th>Rol</th>
-          <th>Programador asignado</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let u of usuarios">
-          <td>{{ u.nombre }}</td>
-          <td>{{ u.email || '—' }}</td>
-          <td>
-            <select [(ngModel)]="u.rol">
-              <option *ngFor="let r of rolesPosibles" [ngValue]="r">
-                {{ r }}
-              </option>
-            </select>
-          </td>
-          <td>
-            <ng-container *ngIf="u.rol === 'programador'; else noProg">
-              <select [(ngModel)]="u.programadorId">
-                <option [ngValue]="null">Sin asignar</option>
-                <option *ngFor="let p of programadores" [ngValue]="p.id">
-                  {{ p.nombre }} (id: {{ p.id }})
-                </option>
-              </select>
-            </ng-container>
-            <ng-template #noProg>
-              <span>—</span>
-            </ng-template>
-          </td>
-          <td>
-            <button (click)="guardarUsuario(u)">
-              Guardar
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
+        <div class="contenedor-tabla">
+            <table class="tabla-usuarios">
+            <thead>
+                <tr>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Rol</th>
+                <th>Programador asignado</th>
+                <th style="width: 100px;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let u of usuarios">
+                <td><span class="texto-negrita">{{ u.nombre }}</span></td>
+                <td>{{ u.email || '—' }}</td>
+                <td>
+                    <select [(ngModel)]="u.rol" class="select-pequeno">
+                    <option *ngFor="let r of rolesPosibles" [ngValue]="r">
+                        {{ r }}
+                    </option>
+                    </select>
+                </td>
+                <td>
+                    <ng-container *ngIf="u.rol === 'programador'; else noProg">
+                    <select [(ngModel)]="u.programadorId" class="select-pequeno">
+                        <option [ngValue]="null">Sin asignar</option>
+                        <option *ngFor="let p of programadores" [ngValue]="p.id">
+                        {{ p.nombre }}
+                        </option>
+                    </select>
+                    </ng-container>
+                    <ng-template #noProg>
+                    <span class="texto-tenue">—</span>
+                    </ng-template>
+                </td>
+                <td>
+                    <button class="boton-accion-pequeno" (click)="guardarUsuario(u)">
+                    Guardar
+                    </button>
+                </td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+    </div>
+  </div>
 </div>

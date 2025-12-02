@@ -57,6 +57,8 @@ export class Agendar {
     }
   }
 
+  // Cargar disponibilidades del programador seleccionado
+
   async cargarDisponibilidades(programadorId: number) {
     this.disponibilidadesProgramador =
       await this.disponibilidadesService.getPorProgramador(programadorId);
@@ -70,13 +72,15 @@ export class Agendar {
     }
   }
 
-  async onProgramadorChange(id: number) {
+  // Manejo de cambios en el formulario
+
+  async cambiosProgramador(id: number) {
     await this.cargarDisponibilidades(id);
     this.form.fecha = '';
     this.form.hora = '';
   }
 
-  onSlotChange(slotId: number) {
+  cambiosSlots(slotId: number) {
     const slot = this.disponibilidadesProgramador.find(d => d.id === slotId);
     if (slot) {
       this.form.fecha = slot.fecha;

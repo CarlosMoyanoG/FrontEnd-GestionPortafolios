@@ -1,0 +1,167 @@
+.contenedor-mis-asesorias {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+h1 {
+  color: #1f2937;
+  margin-bottom: 2rem;
+}
+
+h2 {
+  margin: 0;
+  color: #111;
+  font-size: 1.25rem;
+}
+
+.subtitulo {
+  color: #6b7280;
+  margin: 0.5rem 0 0 0;
+  font-size: 0.95rem;
+}
+
+.tarjeta {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  margin-bottom: 2rem;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+}
+
+.cabecera-tarjeta {
+  background-color: #fff;
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.cuerpo-tarjeta {
+  padding: 1.5rem;
+}
+
+.lista-notificaciones {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.lista-notificaciones li {
+  padding: 1rem 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.lista-notificaciones li:last-child {
+  border-bottom: none;
+}
+
+.fila-notificacion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.encabezado-notificacion {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.detalle-fecha {
+  color: #9ca3af;
+  font-size: 0.85rem;
+}
+
+.mensaje-respuesta {
+  background-color: #f9fafb;
+  padding: 0.8rem;
+  border-left: 4px solid #89373d;
+  border-radius: 4px;
+  color: #4b5563;
+  font-size: 0.95rem;
+  font-style: italic;
+  margin-top: 0.2rem;
+}
+
+.contenedor-tabla {
+  overflow-x: auto;
+}
+
+.tabla-mis-asesorias {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+
+  thead {
+    background-color: #f9fafb;
+    border-bottom: 2px solid #e5e7eb;
+    
+    th {
+      padding: 0.8rem 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: #374151;
+    }
+  }
+
+  td {
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid #f3f4f6;
+    vertical-align: middle;
+    color: #4b5563;
+  }
+
+  tr:hover {
+    background-color: #fafafa;
+  }
+}
+
+.texto-truncado {
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.texto-tenue {
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.insignia {
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  display: inline-block;
+}
+
+.insignia.pendiente {
+  background-color: #fff7ed; 
+  color: #c2410c;
+  border: 1px solid #ffedd5;
+}
+
+.insignia.aprobada, .insignia.aceptada {
+  background-color: #ecfdf5; 
+  color: #047857;
+  border: 1px solid #d1fae5;
+}
+
+.insignia.rechazada, .insignia.cancelada {
+  background-color: #fef2f2; 
+  color: #b91c1c;
+  border: 1px solid #fee2e2;
+}
+
+.estado-vacio, .cargando-contenedor {
+  text-align: center;
+  padding: 3rem;
+  color: #9ca3af;
+  font-style: italic;
+  
+  background: transparent; 
+}

@@ -22,7 +22,6 @@ export class AdminProgramador implements OnInit {
   programador: Programador | undefined;
   estadosPosibles: EstadoAsesoria[] = ['pendiente', 'aprobada', 'rechazada'];
 
-  // ---- Perfil ----
   perfilEditando = false;
   perfilForm = {
     nombre: '',
@@ -34,7 +33,6 @@ export class AdminProgramador implements OnInit {
     sitioWeb: '',
   };
 
-  // ---- Proyectos ----
   tecnologiasTexto = '';
   editandoProyectoId: number | null = null;
   tiposSeccion: TipoSeccionProyecto[] = ['academico', 'laboral'];
@@ -61,6 +59,8 @@ export class AdminProgramador implements OnInit {
     await this.cargarDatos();
   }
 
+  // Cargar datos del programador y sus asesorías
+
   private async cargarDatos(): Promise<void> {
     const programadorId = this.auth.usuarioActual.programadorId ?? 1;
 
@@ -83,7 +83,7 @@ export class AdminProgramador implements OnInit {
     }
   }
 
-  // ================= PERFIL =================
+  // Cargar formulario de perfil
 
   private cargarPerfilForm(): void {
     if (!this.programador) return;
@@ -108,6 +108,8 @@ export class AdminProgramador implements OnInit {
     this.perfilEditando = false;
     this.cargarPerfilForm();
   }
+
+  // Guardar perfil
 
   async guardarPerfil(): Promise<void> {
     if (!this.programador) return;
@@ -136,7 +138,7 @@ export class AdminProgramador implements OnInit {
     setTimeout(() => (this.mensajeExito = ''), 3000);
   }
 
-  // =============== ASESORÍAS ===============
+  // Actualizar estado de asesoría
 
   async actualizarEstado(a: Asesoria): Promise<void> {
     await this.asesoriasService.actualizarAsesoria(a.id, {
@@ -151,7 +153,7 @@ export class AdminProgramador implements OnInit {
     }, 3000);
   }
 
-  // =============== PROYECTOS ===============
+  // Proyectos
 
   prepararNuevoProyecto(): void {
     this.editandoProyectoId = null;

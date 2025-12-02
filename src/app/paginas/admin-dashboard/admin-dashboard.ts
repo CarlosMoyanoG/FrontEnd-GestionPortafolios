@@ -27,7 +27,6 @@ export class AdminDashboard implements OnInit {
   rolesPosibles: RolUsuario[] = ['visitante', 'admin', 'programador'];
   programadorEditandoId: number | null = null;
 
-
   nuevoProgramador = {
     nombre: '',
     especialidad: '',
@@ -37,7 +36,6 @@ export class AdminDashboard implements OnInit {
     linkedinUrl: '',
     sitioWeb: ''
   };
-
 
   nuevaDisponibilidad = {
     programadorId: 0,
@@ -62,6 +60,8 @@ export class AdminDashboard implements OnInit {
     await this.cargarAsesorias();
   }
 
+  // Cargar asesorías
+
   private async cargarAsesorias(): Promise<void> {
     const listaProgramadores = this.programadores;
     const listaAsesorias: Asesoria[] = await this.asesoriasService.getAsesorias();
@@ -74,6 +74,8 @@ export class AdminDashboard implements OnInit {
       };
     });
   }
+
+  // Crear o editar programador
 
   async crearProgramador() {
     if (!this.nuevoProgramador.nombre || !this.nuevoProgramador.especialidad) {
@@ -128,6 +130,8 @@ export class AdminDashboard implements OnInit {
     this.programadorEditandoId = null;
   }
 
+  // Crear disponibilidad
+
   async crearDisponibilidad() {
     if (
       !this.nuevaDisponibilidad.programadorId ||
@@ -161,6 +165,8 @@ export class AdminDashboard implements OnInit {
     return programador ? programador.nombre : 'ID ' + id;
   }
 
+  // Guardar usuario
+
   async guardarUsuario(u: Usuario & { uid: string }) {
     await this.usuariosService.actualizarUsuarioRolYProgramador(
       u.uid,
@@ -188,6 +194,7 @@ export class AdminDashboard implements OnInit {
     alert('Usuario actualizado correctamente');
   }
 
+  // Editar programador
 
     editarProgramador(p: Programador) {
     this.programadorEditandoId = p.id;
@@ -202,6 +209,8 @@ export class AdminDashboard implements OnInit {
     };
   }
 
+  // Cancelar edición de programador
+
   cancelarEdicionProgramador() {
     this.programadorEditandoId = null;
     this.nuevoProgramador = {
@@ -214,6 +223,8 @@ export class AdminDashboard implements OnInit {
       sitioWeb: ''
     };
   }
+
+  // Eliminar programador
 
   async eliminarProgramador(p: Programador) {
     const confirmar = confirm(`¿Seguro que deseas eliminar al programador "${p.nombre}"?`);
