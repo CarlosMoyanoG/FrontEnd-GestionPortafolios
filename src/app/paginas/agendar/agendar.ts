@@ -34,6 +34,9 @@ export class Agendar {
   selectedSlotId = 0;
   sinHorarios = false;
 
+  // controla si el usuario puede editar manualmente fecha y hora
+  bloquearFechaHora = false;
+
   constructor(
     private programadoresService: Programadores,
     private asesoriasService: Asesorias,
@@ -58,13 +61,17 @@ export class Agendar {
   }
 
   // Cargar disponibilidades del programador seleccionado
-
   async cargarDisponibilidades(programadorId: number) {
     this.disponibilidadesProgramador =
       await this.disponibilidadesService.getPorProgramador(programadorId);
 
     this.selectedSlotId = 0;
     this.sinHorarios = this.disponibilidadesProgramador.length === 0;
+
+    // resetear fecha/hora y permitimos de nuevo la edición manual
+    this.form.fecha = '';
+    this.form.hora = '';
+    this.bloquearFechaHora = false;
 
     if (this.sinHorarios) {
       this.form.fecha = '';
@@ -73,18 +80,22 @@ export class Agendar {
   }
 
   // Manejo de cambios en el formulario
-
   async cambiosProgramador(id: number) {
     await this.cargarDisponibilidades(id);
-    this.form.fecha = '';
-    this.form.hora = '';
   }
 
   cambiosSlots(slotId: number) {
+    this.selectedSlotId = slotId;
+
     const slot = this.disponibilidadesProgramador.find(d => d.id === slotId);
     if (slot) {
       this.form.fecha = slot.fecha;
       this.form.hora = slot.hora;
+      this.bloquearFechaHora = true;
+    } else {
+      this.form.fecha = '';
+      this.form.hora = '';
+      this.bloquearFechaHora = false;
     }
   }
 
@@ -96,6 +107,11 @@ export class Agendar {
 
     if (this.sinHorarios) {
       alert('Este programador no tiene horarios disponibles, elige otro.');
+      return;
+    }
+
+    if (!this.selectedSlotId) {
+      alert('Debes seleccionar uno de los horarios disponibles.');
       return;
     }
 
@@ -116,5 +132,6 @@ export class Agendar {
     this.form.hora = '';
     this.form.descripcionProyecto = '';
     this.selectedSlotId = 0;
+    this.bloquearFechaHora = false;
   }
 }

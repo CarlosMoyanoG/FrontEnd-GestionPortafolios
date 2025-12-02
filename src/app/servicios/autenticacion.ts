@@ -49,6 +49,8 @@ export class Autenticacion {
   }
 
   // LOGIN como ADMIN (solo rol dentro de la app, no toca Firestore)
+
+  
   async loginConGoogleComoAdmin(): Promise<void> {
     const provider = new GoogleAuthProvider();
     const cred = await signInWithPopup(this.authFirebase, provider);
