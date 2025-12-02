@@ -210,40 +210,6 @@
     </div>
   </div>
 
-  <!-- NOTIFICACIÓN SIMULADA -->
-  <section class="notificacion-simulada" *ngIf="ultimaNotificacion">
-    <h2>Notificación simulada al cliente</h2>
-
-    <p>
-      <strong>Para:</strong>
-      {{ ultimaNotificacion.nombreCliente }} -
-      {{ ultimaNotificacion.emailCliente }}
-    </p>
-
-    <p><strong>Estado:</strong> {{ ultimaNotificacion.estado }}</p>
-
-    <p><strong>Mensaje que se enviaría (correo/WhatsApp):</strong></p>
-
-    <ng-container *ngIf="ultimaNotificacion.mensajeRespuesta && ultimaNotificacion.mensajeRespuesta.trim(); else mensajePorDefecto">
-      <p class="texto-notificacion">
-        Hola {{ ultimaNotificacion.nombreCliente }},<br />
-        {{ ultimaNotificacion.mensajeRespuesta }}
-      </p>
-    </ng-container>
-
-    <ng-template #mensajePorDefecto>
-      <p class="texto-notificacion">
-        Hola {{ ultimaNotificacion.nombreCliente }},<br />
-        Tu solicitud de asesoría con
-        {{ programador.nombre }}
-        para el día {{ ultimaNotificacion.fecha }} a las
-        {{ ultimaNotificacion.hora }}
-        ha sido <strong>{{ ultimaNotificacion.estado }}</strong>.
-        <br />
-      </p>
-    </ng-template>
-  </section>
-
   <!-- PROYECTOS -->
   <div class="card table-card">
     <div class="card-header">

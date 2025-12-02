@@ -5,6 +5,7 @@
     <a routerLink="/login" routerLinkActive="active" *ngIf="!auth.usuarioActual.id"> Login </a>
     <a routerLink="/inicio" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"> Inicio </a>
     <a routerLink="/agendar" routerLinkActive="active"> Agendar Asesoría</a>
+    <a routerLink="/mis-asesorias" routerLinkActive="active">Mis asesorías</a>
 
     <a *ngIf="auth.esAdmin()" routerLink="/admin" routerLinkActive="active">
       Admin

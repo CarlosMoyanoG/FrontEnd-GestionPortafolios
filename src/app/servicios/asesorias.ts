@@ -41,6 +41,12 @@ export class Asesorias {
     return snap.docs.map(d => d.data() as Asesoria);
   }
 
+  async getAsesoriasPorEmailCliente(email: string): Promise<Asesoria[]> {
+    const qRef = query(this.coleccionRef, where('emailCliente', '==', email));
+    const snap = await getDocs(qRef);
+    return snap.docs.map(d => d.data() as Asesoria);
+  }
+
   async actualizarAsesoria(id: number, cambios: Partial<Asesoria>): Promise<void> {
     const q = query(this.coleccionRef, where('id', '==', id));
     const snap = await getDocs(q);

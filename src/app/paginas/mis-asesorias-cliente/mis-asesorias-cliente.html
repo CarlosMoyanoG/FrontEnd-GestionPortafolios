@@ -1,0 +1,113 @@
+<div class="mis-asesorias-container" *ngIf="!cargando; else cargandoTpl">
+  <h1>Mis asesorías y notificaciones</h1>
+
+  <ng-container *ngIf="emailClienteActual; else sinEmailTpl">
+
+    <!-- NOTIFICACIONES RECIENTES -->
+    <div class="card" *ngIf="notificacionesRecientes.length; else sinNotificacionesTpl">
+      <div class="card-header">
+        <h2>Notificaciones recientes</h2>
+        <p class="subtitulo">
+          Aquí ves las últimas respuestas de los programadores a tus solicitudes.
+        </p>
+      </div>
+      <div class="card-body">
+        <ul class="lista-notificaciones">
+          <li *ngFor="let a of notificacionesRecientes">
+            <div class="fila-notificacion">
+              <div>
+                <strong>{{ a.nombreProgramador }}</strong>
+                <span class="badge" [ngClass]="a.estado">
+                  {{ a.estado | titlecase }}
+                </span>
+                <span class="detalle-fecha">
+                  — {{ a.fecha }} a las {{ a.hora }}
+                </span>
+              </div>
+              <div class="mensaje-respuesta">
+                <ng-container *ngIf="a.mensajeRespuesta && a.mensajeRespuesta.trim(); else mensajePorDefecto">
+                  "{{ a.mensajeRespuesta }}"
+                </ng-container>
+                <ng-template #mensajePorDefecto>
+                  El programador cambió el estado de tu asesoría a
+                  <strong>{{ a.estado }}</strong>.
+                </ng-template>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <ng-template #sinNotificacionesTpl>
+      <p class="texto-muted">
+        Aún no tienes notificaciones (ninguna asesoría ha sido aprobada o rechazada).
+      </p>
+    </ng-template>
+
+    <!-- HISTORIAL COMPLETO -->
+    <div class="card tabla-historial" *ngIf="asesoriasCliente.length; else sinAsesoriasTpl">
+      <div class="card-header">
+        <h2>Historial de asesorías</h2>
+      </div>
+      <div class="card-body table-responsive">
+        <table class="tabla-asesorias">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Programador</th>
+              <th>Fecha</th>
+              <th>Hora</th>
+              <th>Estado</th>
+              <th>Mensaje del programador</th>
+              <th>Descripción del proyecto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let a of asesoriasCliente">
+              <td>{{ a.id }}</td>
+              <td>{{ a.nombreProgramador }}</td>
+              <td>{{ a.fecha }}</td>
+              <td>{{ a.hora }}</td>
+              <td>
+                <span class="badge" [ngClass]="a.estado">
+                  {{ a.estado | titlecase }}
+                </span>
+              </td>
+              <td>
+                <ng-container *ngIf="a.mensajeRespuesta && a.mensajeRespuesta.trim(); else sinMensajeTpl">
+                  {{ a.mensajeRespuesta }}
+                </ng-container>
+                <ng-template #sinMensajeTpl>
+                  <span class="texto-muted">Sin mensaje</span>
+                </ng-template>
+              </td>
+              <td>
+                <div class="desc-truncada" [title]="a.descripcionProyecto">
+                  {{ a.descripcionProyecto }}
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <ng-template #sinAsesoriasTpl>
+      <p class="texto-muted">
+        Todavía no has agendado ninguna asesoría.
+      </p>
+    </ng-template>
+
+  </ng-container>
+
+  <ng-template #sinEmailTpl>
+    <p class="texto-muted">
+      Debes iniciar sesión para ver tus asesorías y notificaciones.
+    </p>
+  </ng-template>
+</div>
+
+<ng-template #cargandoTpl>
+  <p class="texto-muted">Cargando tus asesorías...</p>
+</ng-template>

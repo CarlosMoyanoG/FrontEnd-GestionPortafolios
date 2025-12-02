@@ -1,14 +1,13 @@
 import { Routes } from '@angular/router';
-
 import { PaginaInicio } from './paginas/pagina-inicio/pagina-inicio';
 import { AdminDashboard } from './paginas/admin-dashboard/admin-dashboard';
 import { AdminProgramador } from './paginas/admin-programador/admin-programador';
 import { Agendar } from './paginas/agendar/agendar';
 import { Login } from './paginas/login/login';
 import { Portafolio } from './paginas/portafolio/portafolio';
-
 import { adminGuard } from './guards/admin.guard';
 import { programadorGuard } from './guards/programador.guard';
+import { MisAsesoriasCliente } from './paginas/mis-asesorias-cliente/mis-asesorias-cliente';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -16,6 +15,7 @@ export const routes: Routes = [
     {path: 'agendar', component: Agendar},
     {path: 'login', component: Login},
     {path: 'portafolios/:id', component: Portafolio},
+    { path: 'mis-asesorias', component: MisAsesoriasCliente },
     
     {
         path: 'admin',

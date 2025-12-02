@@ -21,7 +21,6 @@ export class AdminProgramador implements OnInit {
   asesorias: Asesoria[] = [];
   programador: Programador | undefined;
   estadosPosibles: EstadoAsesoria[] = ['pendiente', 'aprobada', 'rechazada'];
-  ultimaNotificacion?: Asesoria;
 
   // ---- Perfil ----
   perfilEditando = false;
@@ -146,7 +145,6 @@ export class AdminProgramador implements OnInit {
     });
 
     this.mensajeExito = `Asesoría #${a.id} actualizada correctamente`;
-    this.ultimaNotificacion = { ...a };
 
     setTimeout(() => {
       this.mensajeExito = '';
