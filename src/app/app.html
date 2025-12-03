@@ -2,7 +2,7 @@
   <div class="titulo">Portafolios</div>
 
   <nav class="nav">
-    <a routerLink="/login" routerLinkActive="active" *ngIf="!auth.usuarioActual.id"> Login </a>
+    <a routerLink="/login" routerLinkActive="active" *ngIf="auth.esVisitante()"> Login </a>
     <a routerLink="/inicio" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"> Inicio </a>
     <a routerLink="/agendar" routerLinkActive="active"> Agendar Asesoría</a>
     <a routerLink="/mis-asesorias" routerLinkActive="active">Mis asesorías</a>
@@ -14,9 +14,14 @@
     <a *ngIf="auth.esProgramador()" routerLink="/programador" routerLinkActive="active">
       Programador
     </a>
+
+    <button type="button" class="boton-logout" *ngIf="!auth.esVisitante()" (click)="cerrarSesion()">
+      Cerrar sesión
+    </button>
   </nav>
 
-  <div class="perfil-usuario" *ngIf="auth.usuarioActual.id"> <div class="info-texto">
+  <div class="perfil-usuario" *ngIf="auth.usuarioActual.id">
+    <div class="info-texto">
       <span class="nombre">{{ auth.usuarioActual.nombre }}</span>
       <span class="rol">
         {{ auth.usuarioActual.rol | titlecase }} 
@@ -43,5 +48,3 @@
 <footer *ngIf="mostrarLayout">
   Autor: Carlos Moyano Guevara | Programacion y Plataformas Web
 </footer>
-
-

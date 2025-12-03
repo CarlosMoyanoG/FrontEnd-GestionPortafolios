@@ -49,9 +49,4 @@ export class Login {
       this.cargando = false;
     }
   }
-
-  async salir() {
-    await this.auth.cerrarSesion();
-    this.router.navigate(['/inicio']);
-  }
 }

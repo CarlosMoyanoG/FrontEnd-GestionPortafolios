@@ -11,6 +11,6 @@ export const programadorGuard: CanActivateFn = (route, state) => {
     return true;
   }
 
-  alert('Accion no autorizada');
+  console.warn('Acceso denegado: se requiere rol programador');
   return router.parseUrl('/inicio');
 };

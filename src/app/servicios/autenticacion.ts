@@ -5,6 +5,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   signOut,
+  onAuthStateChanged
 } from '@angular/fire/auth';
 import { Usuarios } from './usuarios';
 import { Programadores } from './programadores';
@@ -26,7 +27,10 @@ export class Autenticacion {
     private authFirebase: Auth,
     private usuariosService: Usuarios,
     private programadoresService: Programadores
-  ) {}
+  ) {
+
+    this.inicializarEscuchaAuth();
+  }
 
   get usuarioActual(): Usuario {
     return this._usuarioActual;
@@ -48,24 +52,47 @@ export class Autenticacion {
     return this._usuarioActual.rol === 'programador';
   }
 
-  // LOGIN como ADMIN (solo rol dentro de la app, no toca Firestore)
+  private inicializarEscuchaAuth(): void {
+    onAuthStateChanged(this.authFirebase, async (user) => {
+      try {
+        if (user) {
+          this._uid = user.uid;
 
-  
-  async loginConGoogleComoAdmin(): Promise<void> {
-    const provider = new GoogleAuthProvider();
-    const cred = await signInWithPopup(this.authFirebase, provider);
+          const usuarioDb = await this.usuariosService.obtenerOCrearUsuarioDesdeFirebase({
+            uid: user.uid,
+            nombre: user.displayName,
+            email: user.email,
+            fotoUrl: user.photoURL,
+          });
 
-    this._uid = cred.user.uid;
+          this._usuarioActual = usuarioDb;
 
-    this._usuarioActual = {
-      id: 1,
-      nombre: cred.user.displayName || 'Administrador',
-      rol: 'admin',
-      email: cred.user.email || undefined,
-      fotoUrl: cred.user.photoURL || undefined,
-    };
+          if (
+            usuarioDb.rol === 'programador' &&
+            usuarioDb.programadorId != null
+          ) {
+            await this.programadoresService.actualizarDuenioYContacto(
+              usuarioDb.programadorId,
+              user.uid,
+              usuarioDb.email ?? user.email ?? null,
+              usuarioDb.fotoUrl ?? user.photoURL ?? undefined
+            );
+          }
 
-    console.log('Login Google como ADMIN', this._usuarioActual);
+          console.log('Sesión restaurada desde Firebase:', this._usuarioActual);
+        } else {
+          this._uid = null;
+          this._usuarioActual = {
+            id: 0,
+            nombre: 'Visitante',
+            rol: 'visitante',
+          };
+          console.log('No hay sesión activa (usuario visitante).');
+        }
+      } catch (error) {
+        console.error('Error al sincronizar la sesión:', error);
+      }
+    });
   }
 
   // LOGIN normal (visitante / programador)

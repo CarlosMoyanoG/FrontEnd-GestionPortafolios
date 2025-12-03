@@ -3,11 +3,21 @@
   margin: 0 auto;
   padding: 2rem;
   min-height: 100vh;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 }
 
 h1 {
   color: #1f2937;
   margin-bottom: 2rem;
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
 }
 
 h2 {
@@ -35,10 +45,18 @@ h2 {
   background-color: #fff;
   padding: 1.2rem 1.5rem;
   border-bottom: 1px solid #e5e7eb;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 }
 
 .cuerpo-tarjeta {
   padding: 1.5rem;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 }
 
 .lista-notificaciones {
@@ -67,6 +85,12 @@ h2 {
   align-items: center;
   gap: 0.8rem;
   flex-wrap: wrap;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
 }
 
 .detalle-fecha {
@@ -87,12 +111,14 @@ h2 {
 
 .contenedor-tabla {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .tabla-mis-asesorias {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.95rem;
+  min-width: 800px;
 
   thead {
     background-color: #f9fafb;

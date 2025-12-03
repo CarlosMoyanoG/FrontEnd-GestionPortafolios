@@ -3,11 +3,21 @@
   margin: 0 auto;
   padding: 2rem;
   min-height: 100vh;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 }
 
 h1 {
   color: #1f2937;
   margin-bottom: 2rem;
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
 }
 
 h2 {
@@ -36,16 +46,29 @@ h3 {
   background-color: #fff;
   padding: 1.2rem 1.5rem;
   border-bottom: 1px solid #e5e7eb;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 }
 
 .cuerpo-tarjeta {
   padding: 1.5rem;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 }
 
 .cuadricula-gestion {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 2rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
 }
 
 .formulario-estilizado {
@@ -63,6 +86,11 @@ h3 {
 .fila-formulario {
   display: flex;
   gap: 1rem;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
 }
 
 .fila-formulario .grupo-formulario {
@@ -81,6 +109,7 @@ input, select, textarea {
   border-radius: 6px;
   font-size: 0.95rem;
   transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
 }
 
 input:focus, select:focus, textarea:focus {
@@ -99,6 +128,7 @@ input:focus, select:focus, textarea:focus {
   cursor: pointer;
   transition: background-color 0.2s;
   margin-top: 0.5rem;
+  width: 100%;
 }
 
 .boton-primario:hover:not(:disabled) {
@@ -120,6 +150,7 @@ input:focus, select:focus, textarea:focus {
   cursor: pointer;
   margin-top: 0.5rem;
   transition: background-color 0.2s;
+  width: 100%;
 
   &:hover {
     background-color: #e5e7eb;
@@ -128,12 +159,14 @@ input:focus, select:focus, textarea:focus {
 
 .contenedor-tabla {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .tabla-asesorias {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.95rem;
+  min-width: 800px;
 
   thead {
     background-color: #f9fafb;
@@ -161,12 +194,14 @@ input:focus, select:focus, textarea:focus {
 
 .contenedor-tabla-pequena {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .tabla-simple {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.9rem;
+  min-width: 300px;
 }
 
 .tabla-simple th, .tabla-simple td {
@@ -186,6 +221,7 @@ input:focus, select:focus, textarea:focus {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.95rem;
+  min-width: 700px;
 
   thead {
     background-color: #f9fafb;
@@ -230,6 +266,12 @@ input:focus, select:focus, textarea:focus {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.2rem;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
 }
 
 .texto-pequeno {
@@ -283,6 +325,7 @@ input:focus, select:focus, textarea:focus {
   font-weight: 600;
   background-color: #e5e7eb;
   color: #374151;
+  white-space: nowrap;
 }
 
 .insignia-clara {
@@ -309,6 +352,7 @@ input:focus, select:focus, textarea:focus {
   font-size: 0.85rem;
   cursor: pointer;
   transition: opacity 0.2s;
+  white-space: nowrap;
 
   &:hover {
     opacity: 0.9;

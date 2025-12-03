@@ -24,6 +24,11 @@ export class App {
         this.mostrarLayout = !e.urlAfterRedirects.startsWith('/login');
       });
   }
+
+   async cerrarSesion(): Promise<void> {
+    await this.auth.cerrarSesion();
+    this.router.navigate(['/login']);
+  }
 }
 
 

@@ -1,67 +1,99 @@
 .header-principal {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.75rem 1.5rem;
-    background: #142433;
-    color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  background: #142433;
+  color: #ffffff;
+
+  @media (max-width: 768px) {
+    flex-direction: column; 
+    padding: 1rem;
+    gap: 1rem; 
+  }
 }
 
 .titulo {
-    text-align: left;   
-    flex-grow: 1;
-    font-weight: 600;
-    font-size: 1.1rem;
+  text-align: left;
+  flex-grow: 1;
+  font-weight: 600;
+  font-size: 1.1rem;
+
+  @media (max-width: 768px) {
+    text-align: center; 
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
 }
 
-.nav a {
+.nav {
+  @media (max-width: 768px) {
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: center;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  a {
     margin-left: 1rem;
     text-decoration: none;
     color: #ffffff;
     font-size: 0.95rem;
-}
 
-.nav a:hover {
+    @media (max-width: 768px) {
+      margin-left: 0;
+      margin: 0.25rem 0.5rem; 
+      font-size: 0.9rem;
+    }
+  }
+
+  a:hover {
     text-decoration: underline;
-}
+  }
 
-.nav a.active {
+  a.active {
     font-weight: 600;
     border-bottom: 2px solid #BD2F28;
+  }
 }
 
 .contenido-principal {
-    padding: 3rem;
-    max-width: 1100px;
-    margin: 0 auto;
+  padding: 3rem;
+  max-width: 1100px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    padding: 1.5rem 1rem; 
+    width: 100%;
+  }
 }
 
 footer {
-    margin-top: 2rem;
-    padding: 1rem 1.5rem;
-    text-align: center;
-    font-size: 0.85rem;
-    color: #142433;
-    border-top: 1px solid #BD2F28;
+  margin-top: 2rem;
+  padding: 1rem 1.5rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #142433;
+  border-top: 1px solid #BD2F28;
 }
 
 .contenedor-btn-usuarios {
-
-    margin-left: 3rem;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.25rem;
-    font-size: 0.8rem;
+  margin-left: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+  font-size: 0.8rem;
 }
 
 .acciones button {
-    margin-left: 0.25rem;
-    padding: 0.25rem 0.6rem;
-    border-radius: 9999px;
-    border: none;
-    cursor: pointer;
-    font-size: 0.75rem;
+  margin-left: 0.25rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.75rem;
 }
 
 .perfil-usuario {
@@ -69,15 +101,31 @@ footer {
   align-items: center;
   gap: 0.8rem;
   padding-left: 1.5rem;
-  border-left: 1px solid rgba(255,255,255,0.1); 
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
   margin-left: 1rem;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    justify-content: center; 
+    padding-left: 0;
+    border-left: none; 
+    margin-left: 0;
+    margin-top: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1); 
+  }
 }
 
 .info-texto {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   align-items: flex-end;
   line-height: 1.2;
+
+  @media (max-width: 768px) {
+    align-items: center; 
+    text-align: center;
+  }
 }
 
 .nombre {
@@ -88,7 +136,7 @@ footer {
 
 .rol {
   font-size: 0.75rem;
-  color: #90a4ae; 
+  color: #90a4ae;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -96,6 +144,10 @@ footer {
 .email-corto {
   text-transform: none;
   opacity: 0.8;
+  
+  @media (max-width: 480px) {
+    display: none; 
+  }
 }
 
 .avatar-usuario {
@@ -103,7 +155,7 @@ footer {
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #BD2F28; 
+  border: 2px solid #BD2F28;
 }
 
 .avatar-placeholder {
@@ -123,3 +175,22 @@ footer {
   padding-top: 0;
 }
 
+.boton-logout {
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 0.95rem;
+  margin-left: 1rem;
+  padding: 0;
+
+  @media (max-width: 768px) {
+    margin-left: 0;
+    margin-top: 0.5rem;
+    width: 100%; 
+    text-align: center;
+    padding: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+  }
+}
