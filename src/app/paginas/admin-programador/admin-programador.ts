@@ -180,6 +180,8 @@ export class AdminProgramador implements OnInit {
     this.prepararNuevoProyecto();
   }
 
+  // Guardar proyecto 
+
   async guardarProyecto(): Promise<void> {
     if (!this.programador) return;
 
@@ -229,6 +231,8 @@ export class AdminProgramador implements OnInit {
 
     setTimeout(() => (this.mensajeExito = ''), 3000);
   }
+
+  // Eliminar proyecto
 
   async eliminarProyecto(p: Proyecto): Promise<void> {
     if (!this.programador) return;

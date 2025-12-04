@@ -29,13 +29,7 @@ export class Usuarios {
     return doc(this.firestore, 'usuarios', uid);
   }
 
-  /**
-   * Crea el usuario en la colección `usuarios` si no existe
-   * y si ya existe, actualiza email/foto si cambiaron.
-   */
-  async obtenerOCrearUsuarioDesdeFirebase(
-    datos: DatosFirebaseUsuario
-  ): Promise<Usuario> {
+  async obtenerOCrearUsuarioDesdeFirebase(datos: DatosFirebaseUsuario): Promise<Usuario> {
     const ref = this.refUsuario(datos.uid);
     const snap = await getDoc(ref);
 
@@ -53,7 +47,6 @@ export class Usuarios {
       return nuevo;
     }
 
-    // Si ya existe, sincronizamos email/foto si cambiaron
     const existente = snap.data() as Usuario;
     const cambios: any = {};
 
@@ -89,11 +82,7 @@ export class Usuarios {
     });
   }
 
-  async actualizarUsuarioRolYProgramador(
-    uid: string,
-    rol: RolUsuario,
-    programadorId?: number | null
-  ): Promise<void> {
+  async actualizarUsuarioRolYProgramador(uid: string,rol: RolUsuario,programadorId?: number | null): Promise<void> {
     const ref = this.refUsuario(uid);
     const cambios: any = { rol };
 

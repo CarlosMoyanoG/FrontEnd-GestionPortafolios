@@ -103,7 +103,7 @@ export class Autenticacion {
 
     this._uid = user.uid;
 
-    // Sincroniza usuario en colección `usuarios`
+    // Sincroniza usuario en colección usuarioss
     const usuarioDb = await this.usuariosService.obtenerOCrearUsuarioDesdeFirebase({
       uid: user.uid,
       nombre: user.displayName,

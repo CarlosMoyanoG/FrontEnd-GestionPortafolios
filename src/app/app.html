@@ -2,7 +2,7 @@
   <div class="titulo">Portafolios</div>
 
   <nav class="nav">
-    <a routerLink="/login" routerLinkActive="active" *ngIf="auth.esVisitante()"> Login </a>
+    <a routerLink="/login" routerLinkActive="active" *ngIf="!auth.usuarioActual"> Login </a>
     <a routerLink="/inicio" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"> Inicio </a>
     <a routerLink="/agendar" routerLinkActive="active"> Agendar Asesoría</a>
     <a routerLink="/mis-asesorias" routerLinkActive="active">Mis asesorías</a>
@@ -15,7 +15,7 @@
       Programador
     </a>
 
-    <button type="button" class="boton-logout" *ngIf="!auth.esVisitante()" (click)="cerrarSesion()">
+    <button type="button" class="boton-logout" *ngIf="auth.uid" (click)="cerrarSesion()">
       Cerrar sesión
     </button>
   </nav>
