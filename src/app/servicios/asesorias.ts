@@ -1,4 +1,3 @@
-// src/app/servicios/asesorias.ts
 import { Injectable } from '@angular/core';
 import { Asesoria } from '../modelos/asesoria';
 
@@ -15,12 +14,16 @@ import {
 @Injectable({
   providedIn: 'root',
 })
+
 export class Asesorias {
+
   private coleccionRef;
 
   constructor(private firestore: Firestore) {
     this.coleccionRef = collection(this.firestore, 'asesorias');
   }
+
+  // CREAR ASESORIA
 
   async crearAsesoria(nueva: Omit<Asesoria, 'id' | 'estado'>): Promise<Asesoria> {
     const asesoria: Asesoria = {
@@ -34,10 +37,14 @@ export class Asesorias {
     return asesoria;
   }
 
+  // OBTENER ASESORIAS
+
   async getAsesorias(): Promise<Asesoria[]> {
     const snap = await getDocs(this.coleccionRef);
     return snap.docs.map((d) => d.data() as Asesoria);
   }
+
+  // OBTENER ASESORIAS POR CRITERIOS
 
   async getAsesoriasPorEmailCliente(email: string): Promise<Asesoria[]> {
     const qRef = query(this.coleccionRef, where('emailCliente', '==', email));
@@ -45,23 +52,15 @@ export class Asesorias {
     return snap.docs.map((d) => d.data() as Asesoria);
   }
 
-  async getAsesoriasPorProgramadorYFecha(
-    programadorId: number,
-    fecha: string
-  ): Promise<Asesoria[]> {
-    const qRef = query(
-      this.coleccionRef,
-      where('programadorId', '==', programadorId),
-      where('fecha', '==', fecha)
-    );
+  async getAsesoriasPorProgramadorYFecha(programadorId: number,fecha: string): Promise<Asesoria[]> {
+    const qRef = query(this.coleccionRef, where('programadorId', '==', programadorId), where('fecha', '==', fecha));
     const snap = await getDocs(qRef);
     return snap.docs.map((d) => d.data() as Asesoria);
   }
 
-  async actualizarAsesoria(
-    id: number,
-    cambios: Partial<Asesoria>
-  ): Promise<void> {
+  // ACTUALIZAR ASESORIA
+
+  async actualizarAsesoria(id: number,cambios: Partial<Asesoria>): Promise<void> {
     const qRef = query(this.coleccionRef, where('id', '==', id));
     const snap = await getDocs(qRef);
 

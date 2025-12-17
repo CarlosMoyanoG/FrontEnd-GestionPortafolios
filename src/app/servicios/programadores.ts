@@ -52,9 +52,7 @@ export class Programadores {
     return programador;
   }
 
-  private async getDocRefPorId(
-    idProgramador: number
-  ): Promise<DocumentReference<DocumentData> | null> {
+  private async getDocRefPorId(idProgramador: number): Promise<DocumentReference<DocumentData> | null> {
     const q = query(this.colRef, where('id', '==', idProgramador));
     const snap = await getDocs(q);
 
@@ -81,10 +79,7 @@ export class Programadores {
     await updateDoc(docRef, cambios);
   }
 
-  async actualizarProyectosProgramador(
-    idProgramador: number,
-    proyectos: Proyecto[]
-  ): Promise<void> {
+  async actualizarProyectosProgramador(idProgramador: number,proyectos: Proyecto[]): Promise<void> {
     const docRef = await this.getDocRefPorId(idProgramador);
     if (!docRef) return;
 
@@ -114,12 +109,7 @@ export class Programadores {
     await deleteDoc(docRef);
   }
 
-  async actualizarDuenioYContacto(
-    programadorId: number,
-    duenioUid: string | null,
-    email?: string | null,
-    fotoUrl?: string
-  ): Promise<void> {
+  async actualizarDuenioYContacto(programadorId: number, duenioUid: string | null,email?: string | null, fotoUrl?: string): Promise<void> {
 
     const ref = await this.getDocRefPorId(programadorId);
     if (!ref) return;

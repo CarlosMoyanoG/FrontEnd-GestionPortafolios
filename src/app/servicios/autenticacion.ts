@@ -13,7 +13,9 @@ import { Programadores } from './programadores';
 @Injectable({
   providedIn: 'root',
 })
+
 export class Autenticacion {
+
   private _usuarioActual: Usuario = {
     id: 0,
     nombre: 'Visitante',
@@ -23,14 +25,11 @@ export class Autenticacion {
 
   private _uid: string | null = null;
 
-  constructor(
-    private authFirebase: Auth,
-    private usuariosService: Usuarios,
-    private programadoresService: Programadores
-  ) {
-
+  constructor(private authFirebase: Auth,private usuariosService: Usuarios,private programadoresService: Programadores) {
     this.inicializarEscuchaAuth();
   }
+
+  // GETTERS
 
   get usuarioActual(): Usuario {
     return this._usuarioActual;
@@ -39,6 +38,8 @@ export class Autenticacion {
   get uid(): string | null {
     return this._uid;
   }
+
+  // MÉTODOS DE ROL
 
   esVisitante(): boolean {
     return this._usuarioActual.rol === 'visitante';
@@ -51,6 +52,8 @@ export class Autenticacion {
   esProgramador(): boolean {
     return this._usuarioActual.rol === 'programador';
   }
+
+  // INICIALIZAR ESCUCHA DE AUTENTICACIÓN
 
   private inicializarEscuchaAuth(): void {
     onAuthStateChanged(this.authFirebase, async (user) => {

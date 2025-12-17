@@ -13,12 +13,15 @@ import { Disponibilidad } from '../modelos/disponibilidad';
 @Injectable({
   providedIn: 'root',
 })
+
 export class Disponibilidades {
   private colRef;
 
   constructor(private firestore: Firestore) {
     this.colRef = collection(this.firestore, 'disponibilidades');
   }
+
+  // CREAR DISPONIBILIDAD
 
   async crearDisponibilidad( data: Omit<Disponibilidad, 'id'>): Promise<Disponibilidad> {
     const registro: Disponibilidad = {
@@ -30,16 +33,22 @@ export class Disponibilidades {
     return registro;
   }
 
+  // OBTENER DISPONIBILIDADES
+
   async getTodas(): Promise<Disponibilidad[]> {
     const snap = await getDocs(this.colRef);
     return snap.docs.map((d) => d.data() as Disponibilidad);
   }
+
+  // OBTENER DISPONIBILIDADES POR CRITERIOS
 
   async getPorProgramador(programadorId: number): Promise<Disponibilidad[]> {
     const qRef = query(this.colRef, where('programadorId', '==', programadorId));
     const snap = await getDocs(qRef);
     return snap.docs.map((d) => d.data() as Disponibilidad);
   }
+
+  // ELIMINAR DISPONIBILIDAD POR ID
 
   async eliminarPorId(id: number): Promise<void> {
     const qRef = query(this.colRef, where('id', '==', id));

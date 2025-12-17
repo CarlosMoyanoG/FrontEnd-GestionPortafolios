@@ -22,6 +22,7 @@ interface DatosFirebaseUsuario {
 @Injectable({
   providedIn: 'root',
 })
+
 export class Usuarios {
   constructor(private firestore: Firestore) {}
 

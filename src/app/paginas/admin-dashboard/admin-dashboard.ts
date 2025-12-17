@@ -85,7 +85,7 @@ export class AdminDashboard implements OnInit {
     const listaProgramadores = this.programadores;
     const listaAsesorias: Asesoria[] = await this.asesoriasService.getAsesorias();
 
-    this.asesorias = listaAsesorias.map((asesoria) => {
+    this.asesorias = listaAsesorias.map((asesoria) => {1
       const programadorEncontrado = listaProgramadores.find(
         (p) => p.id === asesoria.programadorId
       );

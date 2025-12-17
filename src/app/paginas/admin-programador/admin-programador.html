@@ -8,11 +8,8 @@
     <div class="tarjeta tarjeta-perfil">
       <div class="cuerpo-tarjeta contenido-perfil">
         <div class="contenedor-avatar">
-          <ng-container *ngIf="programador?.fotoUrl; else iconoPanel">
-            <img
-              class="imagen-avatar"
-              [src]="programador.fotoUrl"
-              [alt]="'Foto de ' + programador.nombre" />
+          <ng-container *ngIf="programador.fotoUrl; else iconoPanel">
+            <img class="imagen-avatar" [src]="programador.fotoUrl" [alt]="'Foto de ' + programador.nombre" />
           </ng-container>
 
           <ng-template #iconoPanel>
@@ -362,7 +359,7 @@
       </div>
 
       <div class="cuerpo-tarjeta">
-        <div class="contenedor-tabla" *ngIf="programador?.proyectos?.length; else sinProyectos">
+        <div class="contenedor-tabla" *ngIf="programador.proyectos.length; else sinProyectos">
           <table class="tabla-minimalista">
             <thead>
               <tr>
@@ -375,7 +372,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let p of programador?.proyectos">
+              <tr *ngFor="let p of programador.proyectos">
                 <td><span class="texto-negrita">{{ p.nombre }}</span></td>
                 <td>{{ p.seccion | titlecase }}</td>
                 <td>{{ p.participacion }}</td>
