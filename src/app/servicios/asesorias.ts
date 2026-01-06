@@ -26,6 +26,23 @@ export class Asesorias {
   // CREAR ASESORIA
 
   async crearAsesoria(nueva: Omit<Asesoria, 'id' | 'estado'>): Promise<Asesoria> {
+    // Validación preventiva: evitar doble reserva en misma fecha/hora para el mismo programador
+    const conflictoRef = query(
+      this.coleccionRef,
+      where('programadorId', '==', nueva.programadorId),
+      where('fecha', '==', nueva.fecha),
+      where('hora', '==', nueva.hora)
+    );
+    const conflictoSnap = await getDocs(conflictoRef);
+    const existeConflicto = conflictoSnap.docs.some((d) => {
+      const a = d.data() as Asesoria;
+      return a.estado !== 'rechazada';
+    });
+
+    if (existeConflicto) {
+      throw new Error('La hora seleccionada ya está ocupada para este programador.');
+    }
+
     const asesoria: Asesoria = {
       id: Date.now(),
       estado: 'pendiente',

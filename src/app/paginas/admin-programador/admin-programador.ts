@@ -128,6 +128,11 @@ export class AdminProgramador implements OnInit {
     );
   }
 
+  private minutosDesdeHora(hora: string): number {
+    const [h, m] = hora.split(':').map((n) => parseInt(n, 10));
+    return h * 60 + m;
+  }
+
   //  Perfil
 
   private cargarPerfilForm(): void {
@@ -225,6 +230,17 @@ export class AdminProgramador implements OnInit {
       return;
     }
 
+    const inicioMin = this.minutosDesdeHora(f.horaInicio);
+    const finMin = this.minutosDesdeHora(f.horaFin);
+    if (finMin <= inicioMin) {
+      alert('La hora de fin debe ser mayor que la hora de inicio.');
+      return;
+    }
+    if (finMin - inicioMin < 60) {
+      alert('El rango debe ser de al menos 1 hora.');
+      return;
+    }
+
     for (const dia of f.diasSeleccionados) {
       await this.disponibilidadesService.crearDisponibilidad({
         programadorId: this.programador.id,
@@ -270,6 +286,13 @@ export class AdminProgramador implements OnInit {
       return;
     }
 
+    const inicioMin = this.minutosDesdeHora(horaInicio);
+    const finMin = this.minutosDesdeHora(horaFin);
+    if (finMin <= inicioMin) {
+      alert('La hora de fin debe ser mayor que la hora de inicio.');
+      return;
+    }
+
     await this.disponibilidadesService.crearDisponibilidad({
       programadorId: this.programador.id,
       tipo: 'bloqueo',
@@ -304,6 +327,31 @@ export class AdminProgramador implements OnInit {
   //  Asesorías
 
   async actualizarEstado(a: Asesoria): Promise<void> {
+    if (a.estado === 'aprobada') {
+      const asesoriasDia =
+        await this.asesoriasService.getAsesoriasPorProgramadorYFecha(
+          a.programadorId,
+          a.fecha
+        );
+      const existeConflicto = asesoriasDia.some(
+        (otro) =>
+          otro.id !== a.id &&
+          otro.estado !== 'rechazada' &&
+          otro.hora === a.hora
+      );
+      if (existeConflicto) {
+        alert(
+          'Ya existe una asesoria en ese horario. Rechaza la otra o elige otro horario.'
+        );
+        return;
+      }
+    }
+
+    const confirmar = confirm(
+      `Seguro que deseas actualizar el estado de la asesoria #${a.id} a "${a.estado}"?`
+    );
+    if (!confirmar) return;
+
     await this.asesoriasService.actualizarAsesoria(a.id, {
       estado: a.estado,
       mensajeRespuesta: a.mensajeRespuesta ?? '',

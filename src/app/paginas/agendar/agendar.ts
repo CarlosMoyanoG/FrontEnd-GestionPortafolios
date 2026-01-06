@@ -187,6 +187,15 @@ export class Agendar {
       return true;
     });
 
+    // Filtrar horas en el pasado si la fecha seleccionada es hoy
+    const hoy = new Date();
+    const seleccion = new Date(this.form.fecha + 'T00:00:00');
+    const esHoy = hoy.getFullYear() === seleccion.getFullYear() && hoy.getMonth() === seleccion.getMonth() && hoy.getDate() === seleccion.getDate();
+    if (esHoy) {
+      const ahoraMin = hoy.getHours() * 60 + hoy.getMinutes();
+      disponibles = disponibles.filter((h) => this.minutosDesdeHora(h) > ahoraMin);
+    }
+
     this.horasDisponibles = disponibles.sort();
     this.sinHorarios = this.horasDisponibles.length === 0;
   }
@@ -215,14 +224,30 @@ export class Agendar {
       return;
     }
 
-    await this.asesoriasService.crearAsesoria({
-      programadorId: this.form.programadorId,
-      nombreCliente: this.form.nombreCliente,
-      emailCliente: this.form.emailCliente,
-      fecha: this.form.fecha,
-      hora: this.form.hora,
-      descripcionProyecto: this.form.descripcionProyecto,
-    });
+    await this.generarHorasDisponibles();
+    if (!this.horasDisponibles.includes(this.form.hora)) {
+      alert('La hora seleccionada ya no esta disponible. Selecciona otra.');
+      return;
+    }
+
+    const confirmar = confirm(
+      'Seguro que deseas enviar esta solicitud de asesoria?'
+    );
+    if (!confirmar) return;
+
+    try {
+      await this.asesoriasService.crearAsesoria({
+        programadorId: this.form.programadorId,
+        nombreCliente: this.form.nombreCliente,
+        emailCliente: this.form.emailCliente,
+        fecha: this.form.fecha,
+        hora: this.form.hora,
+        descripcionProyecto: this.form.descripcionProyecto,
+      });
+    } catch (e: any) {
+      alert(e?.message || 'No se pudo agendar la asesoría. Intenta con otro horario.');
+      return;
+    }
 
     this.mensajeExito =
       'Tu solicitud fue enviada. Recibirás la confirmación del programador cuando apruebe o rechace la asesoría.';

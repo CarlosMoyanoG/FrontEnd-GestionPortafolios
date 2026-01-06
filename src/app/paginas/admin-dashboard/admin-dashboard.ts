@@ -79,6 +79,11 @@ export class AdminDashboard implements OnInit {
     await this.cargarAsesorias();
   }
 
+  private minutosDesdeHora(hora: string): number {
+    const [h, m] = hora.split(':').map((n) => parseInt(n, 10));
+    return h * 60 + m;
+  }
+
   //  Asesorías
 
   private async cargarAsesorias(): Promise<void> {
@@ -181,7 +186,7 @@ export class AdminDashboard implements OnInit {
 
   async eliminarProgramador(p: Programador) {
     const confirmar = confirm(
-      `¿Seguro que deseas eliminar al programador "${p.nombre}"?`
+      `Seguro que deseas eliminar al programador "${p.nombre}"?`
     );
     if (!confirmar) return;
 
@@ -201,6 +206,17 @@ export class AdminDashboard implements OnInit {
       !f.diasSeleccionados.length
     ) {
       alert('Selecciona programador, días y rango de horas');
+      return;
+    }
+
+    const inicioMin = this.minutosDesdeHora(f.horaInicio);
+    const finMin = this.minutosDesdeHora(f.horaFin);
+    if (finMin <= inicioMin) {
+      alert('La hora de fin debe ser mayor que la hora de inicio.');
+      return;
+    }
+    if (finMin - inicioMin < 60) {
+      alert('El rango debe ser de al menos 1 hora.');
       return;
     }
 
@@ -249,6 +265,13 @@ export class AdminDashboard implements OnInit {
       return;
     }
 
+    const inicioMin = this.minutosDesdeHora(horaInicio);
+    const finMin = this.minutosDesdeHora(horaFin);
+    if (finMin <= inicioMin) {
+      alert('La hora de fin debe ser mayor que la hora de inicio.');
+      return;
+    }
+
     await this.disponibilidadesService.crearDisponibilidad({
       programadorId: f.programadorId,
       tipo: 'bloqueo',
@@ -272,7 +295,9 @@ export class AdminDashboard implements OnInit {
   }
 
   async eliminarDisponibilidad(d: Disponibilidad) {
-    const confirmar = confirm('¿Seguro que deseas eliminar este registro de disponibilidad?');
+    const confirmar = confirm(
+      'Seguro que deseas eliminar este registro de disponibilidad?'
+    );
     if (!confirmar) return;
 
     await this.disponibilidadesService.eliminarPorId(d.id);
@@ -316,6 +341,11 @@ export class AdminDashboard implements OnInit {
   //  Usuarios
 
   async guardarUsuario(u: Usuario & { uid: string }) {
+    const confirmar = confirm(
+      'Seguro que deseas guardar los cambios de este usuario?'
+    );
+    if (!confirmar) return;
+
     await this.usuariosService.actualizarUsuarioRolYProgramador(
       u.uid,
       u.rol,
