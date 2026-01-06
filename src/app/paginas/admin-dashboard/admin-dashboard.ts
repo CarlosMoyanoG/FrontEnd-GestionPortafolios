@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { Asesoria } from '../../modelos/asesoria';
+import { Asesoria, EstadoAsesoria } from '../../modelos/asesoria';
 import { Programadores } from '../../servicios/programadores';
 import { Asesorias } from '../../servicios/asesorias';
 import { Disponibilidad } from '../../modelos/disponibilidad';
@@ -27,11 +27,19 @@ export class AdminDashboard implements OnInit {
   programadorEditandoId: number | null = null;
   seccionActiva: 'asesorias' | 'programadores' | 'horarios' | 'usuarios' =
     'usuarios';
+  resumenAsesorias = {
+    total: 0,
+    porEstado: [] as { estado: EstadoAsesoria; cantidad: number }[],
+    porMes: [] as { etiqueta: string; cantidad: number }[],
+    maxEstado: 1,
+    maxMes: 1,
+  };
 
   nuevoProgramador = {
     nombre: '',
     especialidad: '',
     descripcion: '',
+    fotoUrl: '',
     emailContacto: '',
     githubUrl: '',
     linkedinUrl: '',
@@ -54,6 +62,7 @@ export class AdminDashboard implements OnInit {
     diasSeleccionados: [] as number[],
     horaInicio: '',
     horaFin: '',
+    modalidad: 'virtual' as 'virtual' | 'presencial',
   };
 
   formBloqueo = {
@@ -62,6 +71,7 @@ export class AdminDashboard implements OnInit {
     horaInicio: '',
     horaFin: '',
     todoElDia: false,
+    modalidad: 'virtual' as 'virtual' | 'presencial',
   };
 
   mensajeDisponibilidad = '';
@@ -109,6 +119,7 @@ export class AdminDashboard implements OnInit {
           : 'Sin Asignar',
       };
     });
+    this.calcularResumenAsesorias();
   }
 
   //  Programadores (crear/editar)
@@ -125,6 +136,7 @@ export class AdminDashboard implements OnInit {
         nombre: this.nuevoProgramador.nombre,
         especialidad: this.nuevoProgramador.especialidad,
         descripcion: this.nuevoProgramador.descripcion,
+        fotoUrl: this.nuevoProgramador.fotoUrl || undefined,
         emailContacto: this.nuevoProgramador.emailContacto || undefined,
         githubUrl: this.nuevoProgramador.githubUrl || undefined,
         linkedinUrl: this.nuevoProgramador.linkedinUrl || undefined,
@@ -142,11 +154,11 @@ export class AdminDashboard implements OnInit {
         nombre: this.nuevoProgramador.nombre,
         especialidad: this.nuevoProgramador.especialidad,
         descripcion: this.nuevoProgramador.descripcion,
-        fotoUrl: existente?.fotoUrl,
-        emailContacto: existente?.emailContacto,
-        githubUrl: existente?.githubUrl,
-        linkedinUrl: existente?.linkedinUrl,
-        sitioWeb: existente?.sitioWeb,
+        fotoUrl: this.nuevoProgramador.fotoUrl || undefined,
+        emailContacto: this.nuevoProgramador.emailContacto || undefined,
+        githubUrl: this.nuevoProgramador.githubUrl || undefined,
+        linkedinUrl: this.nuevoProgramador.linkedinUrl || undefined,
+        sitioWeb: this.nuevoProgramador.sitioWeb || undefined,
         duenioUid: existente?.duenioUid,
         proyectos: existente?.proyectos ?? [],
       });
@@ -158,6 +170,7 @@ export class AdminDashboard implements OnInit {
       nombre: '',
       especialidad: '',
       descripcion: '',
+      fotoUrl: '',
       emailContacto: '',
       githubUrl: '',
       linkedinUrl: '',
@@ -172,6 +185,7 @@ export class AdminDashboard implements OnInit {
       nombre: p.nombre,
       especialidad: p.especialidad,
       descripcion: p.descripcion,
+      fotoUrl: p.fotoUrl || '',
       emailContacto: p.emailContacto || '',
       githubUrl: p.githubUrl || '',
       linkedinUrl: p.linkedinUrl || '',
@@ -185,6 +199,7 @@ export class AdminDashboard implements OnInit {
       nombre: '',
       especialidad: '',
       descripcion: '',
+      fotoUrl: '',
       emailContacto: '',
       githubUrl: '',
       linkedinUrl: '',
@@ -235,6 +250,7 @@ export class AdminDashboard implements OnInit {
         diaSemana: dia,
         horaInicio: f.horaInicio,
         horaFin: f.horaFin,
+        modalidad: f.modalidad,
       });
     }
 
@@ -245,6 +261,7 @@ export class AdminDashboard implements OnInit {
       diasSeleccionados: [],
       horaInicio: '',
       horaFin: '',
+      modalidad: 'virtual',
     };
 
     this.mensajeDisponibilidad =
@@ -286,6 +303,7 @@ export class AdminDashboard implements OnInit {
       fecha: f.fecha,
       horaInicio,
       horaFin,
+      modalidad: f.modalidad,
     });
 
     this.disponibilidades = await this.disponibilidadesService.getTodas();
@@ -296,6 +314,7 @@ export class AdminDashboard implements OnInit {
       horaInicio: '',
       horaFin: '',
       todoElDia: false,
+      modalidad: 'virtual',
     };
 
     this.mensajeDisponibilidad = 'Bloqueo registrado correctamente.';
@@ -344,6 +363,59 @@ export class AdminDashboard implements OnInit {
     }
     if (d.hora) return d.hora;
     return '—';
+  }
+
+  descripcionModalidad(d: Disponibilidad): string {
+    return d.modalidad ? d.modalidad : 'Sin dato';
+  }
+
+  private calcularResumenAsesorias(): void {
+    const estados: EstadoAsesoria[] = ['pendiente', 'aprobada', 'rechazada'];
+    const porEstado = estados.map((estado) => ({
+      estado,
+      cantidad: this.asesorias.filter((a) => a.estado === estado).length,
+    }));
+    const porMes = this.construirSerieMensual(this.asesorias);
+    const maxEstado = Math.max(1, ...porEstado.map((e) => e.cantidad));
+    const maxMes = Math.max(1, ...porMes.map((m) => m.cantidad));
+
+    this.resumenAsesorias = {
+      total: this.asesorias.length,
+      porEstado,
+      porMes,
+      maxEstado,
+      maxMes,
+    };
+  }
+
+  private construirSerieMensual(lista: Asesoria[]) {
+    const ahora = new Date();
+    const meses: { clave: string; etiqueta: string; cantidad: number }[] = [];
+
+    for (let i = 5; i >= 0; i -= 1) {
+      const fecha = new Date(ahora.getFullYear(), ahora.getMonth() - i, 1);
+      const anio = fecha.getFullYear();
+      const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+      const etiqueta = `${anio}-${mes}`;
+      meses.push({ clave: etiqueta, etiqueta, cantidad: 0 });
+    }
+
+    for (const a of lista) {
+      const fecha = new Date(`${a.fecha}T00:00:00`);
+      if (isNaN(fecha.getTime())) continue;
+      const clave = `${fecha.getFullYear()}-${String(
+        fecha.getMonth() + 1
+      ).padStart(2, '0')}`;
+      const item = meses.find((m) => m.clave === clave);
+      if (item) item.cantidad += 1;
+    }
+
+    return meses.map(({ etiqueta, cantidad }) => ({ etiqueta, cantidad }));
+  }
+
+  getAnchoBarra(valor: number, maximo: number): string {
+    if (maximo <= 0) return '0%';
+    return `${Math.round((valor / maximo) * 100)}%`;
   }
 
   //  Usuarios

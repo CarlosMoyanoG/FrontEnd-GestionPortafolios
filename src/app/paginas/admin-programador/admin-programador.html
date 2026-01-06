@@ -100,6 +100,16 @@
             </textarea>
           </div>
 
+          <div class="grupo-formulario">
+            <label>Foto URL</label>
+            <input
+              type="url"
+              name="fotoUrl"
+              [(ngModel)]="perfilForm.fotoUrl"
+              [readonly]="!perfilEditando"
+              placeholder="https://sitio.com/mi-foto.jpg" />
+          </div>
+
           <div class="fila-formulario">
             <div class="grupo-formulario">
               <label>Correo de contacto</label>
@@ -175,6 +185,43 @@
       </div>
 
       <div class="cuerpo-tarjeta contenedor-tabla">
+        <div class="resumen-asesorias" *ngIf="asesorias.length">
+          <div class="resumen-card">
+            <h3>Resumen</h3>
+            <p class="resumen-valor">{{ resumenAsesorias.total }}</p>
+            <p class="texto-tenue">Total asesorias</p>
+          </div>
+          <div class="resumen-card">
+            <h3>Por estado</h3>
+            <div class="grafico-barras">
+              <div class="barra-item" *ngFor="let e of resumenAsesorias.porEstado">
+                <span class="barra-label">{{ e.estado | titlecase }}</span>
+                <span class="barra-track">
+                  <span
+                    class="barra-fill"
+                    [style.width]="getAnchoBarra(e.cantidad, resumenAsesorias.maxEstado)"
+                  ></span>
+                </span>
+                <span class="barra-valor">{{ e.cantidad }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="resumen-card">
+            <h3>Ultimos 6 meses</h3>
+            <div class="grafico-barras">
+              <div class="barra-item" *ngFor="let m of resumenAsesorias.porMes">
+                <span class="barra-label">{{ m.etiqueta }}</span>
+                <span class="barra-track">
+                  <span
+                    class="barra-fill"
+                    [style.width]="getAnchoBarra(m.cantidad, resumenAsesorias.maxMes)"
+                  ></span>
+                </span>
+                <span class="barra-valor">{{ m.cantidad }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
         <table class="tabla-minimalista" *ngIf="asesorias.length; else sinAsesorias">
           <thead>
             <tr>
@@ -283,6 +330,18 @@
               </div>
             </div>
 
+            <div class="grupo-formulario">
+              <label>Modalidad</label>
+              <select
+                name="modalidadRec"
+                [(ngModel)]="formHorarioRecurrente.modalidad"
+                required
+              >
+                <option [ngValue]="'virtual'">Virtual</option>
+                <option [ngValue]="'presencial'">Presencial</option>
+              </select>
+            </div>
+
             <button type="submit" [disabled]="fRecProg.invalid" class="boton-primario">
               Guardar horario recurrente
             </button>
@@ -340,6 +399,18 @@
               </div>
             </div>
 
+            <div class="grupo-formulario">
+              <label>Modalidad</label>
+              <select
+                name="modalidadBloq"
+                [(ngModel)]="formBloqueo.modalidad"
+                required
+              >
+                <option [ngValue]="'virtual'">Virtual</option>
+                <option [ngValue]="'presencial'">Presencial</option>
+              </select>
+            </div>
+
             <button type="submit" [disabled]="!formBloqueo.fecha" class="boton-primario">
               Guardar bloqueo
             </button>
@@ -358,6 +429,7 @@
                   <th>Tipo</th>
                   <th>Día / Fecha</th>
                   <th>Horario</th>
+                  <th>Modalidad</th>
                   <th style="width: 80px;">Acciones</th>
                 </tr>
               </thead>
@@ -367,6 +439,7 @@
                   <td>{{ d.tipo | titlecase }}</td>
                   <td>{{ descripcionDia(d) }}</td>
                   <td>{{ descripcionRango(d) }}</td>
+                  <td>{{ descripcionModalidad(d) }}</td>
                   <td>
                     <button type="button" class="boton-texto boton-texto-peligro" (click)="eliminarDisponibilidadProgramador(d)">
                       Eliminar

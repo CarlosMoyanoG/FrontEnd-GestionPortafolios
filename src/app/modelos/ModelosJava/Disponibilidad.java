@@ -13,6 +13,7 @@ public class Disponibilidad {
     int id;
     int programadorId;
     String tipo;      
+    String modalidad;
     int diaSemana;   
     String fecha;
     String horaInicio;
@@ -55,6 +56,14 @@ public class Disponibilidad {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    public String getModalidad() {
+        return modalidad;
+    }
+
+    public void setModalidad(String modalidad) {
+        this.modalidad = modalidad;
     }
 
     public int getDiaSemana() {
@@ -100,7 +109,7 @@ public class Disponibilidad {
     @Override
     public String toString() {
         return "Disp [ID=" + id + ", ProgID=" + programadorId + ", Tipo=" + tipo + 
-               ", Dia=" + diaSemana + ", Fecha=" + fecha + 
+               ", Modalidad=" + modalidad + ", Dia=" + diaSemana + ", Fecha=" + fecha + 
                ", Inicio=" + horaInicio + ", Fin=" + horaFin + "]";
     }
 }

@@ -25,6 +25,13 @@ export class AdminProgramador implements OnInit {
   estadosPosibles: EstadoAsesoria[] = ['pendiente', 'aprobada', 'rechazada'];
   seccionActiva: 'perfil' | 'asesorias' | 'horarios' | 'proyectos' =
     'asesorias';
+  resumenAsesorias = {
+    total: 0,
+    porEstado: [] as { estado: EstadoAsesoria; cantidad: number }[],
+    porMes: [] as { etiqueta: string; cantidad: number }[],
+    maxEstado: 1,
+    maxMes: 1,
+  };
 
   // Perfil
   perfilEditando = false;
@@ -32,6 +39,7 @@ export class AdminProgramador implements OnInit {
     nombre: '',
     especialidad: '',
     descripcion: '',
+    fotoUrl: '',
     emailContacto: '',
     githubUrl: '',
     linkedinUrl: '',
@@ -54,6 +62,7 @@ export class AdminProgramador implements OnInit {
     diasSeleccionados: [] as number[],
     horaInicio: '',
     horaFin: '',
+    modalidad: 'virtual' as 'virtual' | 'presencial',
   };
 
   formBloqueo = {
@@ -61,6 +70,7 @@ export class AdminProgramador implements OnInit {
     horaInicio: '',
     horaFin: '',
     todoElDia: false,
+    modalidad: 'virtual' as 'virtual' | 'presencial',
   };
 
   // Proyectos
@@ -124,6 +134,7 @@ export class AdminProgramador implements OnInit {
       }
 
       this.asesorias = listaFiltrada;
+      this.calcularResumenAsesorias();
       this.cargarPerfilForm();
       await this.cargarHorarios();
     }
@@ -150,6 +161,7 @@ export class AdminProgramador implements OnInit {
       nombre: this.programador.nombre,
       especialidad: this.programador.especialidad,
       descripcion: this.programador.descripcion,
+      fotoUrl: this.programador.fotoUrl || '',
       emailContacto: this.programador.emailContacto || '',
       githubUrl: this.programador.githubUrl || '',
       linkedinUrl: this.programador.linkedinUrl || '',
@@ -183,6 +195,7 @@ export class AdminProgramador implements OnInit {
       nombre: this.perfilForm.nombre.trim(),
       especialidad: this.perfilForm.especialidad.trim(),
       descripcion: this.perfilForm.descripcion.trim(),
+      fotoUrl: this.perfilForm.fotoUrl || undefined,
       emailContacto: this.perfilForm.emailContacto || undefined,
       githubUrl: this.perfilForm.githubUrl || undefined,
       linkedinUrl: this.perfilForm.linkedinUrl || undefined,
@@ -228,6 +241,59 @@ export class AdminProgramador implements OnInit {
     return '—';
   }
 
+  descripcionModalidad(d: Disponibilidad): string {
+    return d.modalidad ? d.modalidad : 'Sin dato';
+  }
+
+  private calcularResumenAsesorias(): void {
+    const estados: EstadoAsesoria[] = ['pendiente', 'aprobada', 'rechazada'];
+    const porEstado = estados.map((estado) => ({
+      estado,
+      cantidad: this.asesorias.filter((a) => a.estado === estado).length,
+    }));
+    const porMes = this.construirSerieMensual(this.asesorias);
+    const maxEstado = Math.max(1, ...porEstado.map((e) => e.cantidad));
+    const maxMes = Math.max(1, ...porMes.map((m) => m.cantidad));
+
+    this.resumenAsesorias = {
+      total: this.asesorias.length,
+      porEstado,
+      porMes,
+      maxEstado,
+      maxMes,
+    };
+  }
+
+  private construirSerieMensual(lista: Asesoria[]) {
+    const ahora = new Date();
+    const meses: { clave: string; etiqueta: string; cantidad: number }[] = [];
+
+    for (let i = 5; i >= 0; i -= 1) {
+      const fecha = new Date(ahora.getFullYear(), ahora.getMonth() - i, 1);
+      const anio = fecha.getFullYear();
+      const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+      const etiqueta = `${anio}-${mes}`;
+      meses.push({ clave: etiqueta, etiqueta, cantidad: 0 });
+    }
+
+    for (const a of lista) {
+      const fecha = new Date(`${a.fecha}T00:00:00`);
+      if (isNaN(fecha.getTime())) continue;
+      const clave = `${fecha.getFullYear()}-${String(
+        fecha.getMonth() + 1
+      ).padStart(2, '0')}`;
+      const item = meses.find((m) => m.clave === clave);
+      if (item) item.cantidad += 1;
+    }
+
+    return meses.map(({ etiqueta, cantidad }) => ({ etiqueta, cantidad }));
+  }
+
+  getAnchoBarra(valor: number, maximo: number): string {
+    if (maximo <= 0) return '0%';
+    return `${Math.round((valor / maximo) * 100)}%`;
+  }
+
   async crearHorarioRecurrenteProgramador() {
     if (!this.programador) return;
 
@@ -256,6 +322,7 @@ export class AdminProgramador implements OnInit {
         diaSemana: dia,
         horaInicio: f.horaInicio,
         horaFin: f.horaFin,
+        modalidad: f.modalidad,
       });
     }
 
@@ -265,6 +332,7 @@ export class AdminProgramador implements OnInit {
       diasSeleccionados: [],
       horaInicio: '',
       horaFin: '',
+      modalidad: 'virtual',
     };
 
     this.mensajeExito = 'Horarios recurrentes guardados.';
@@ -307,6 +375,7 @@ export class AdminProgramador implements OnInit {
       fecha: f.fecha,
       horaInicio,
       horaFin,
+      modalidad: f.modalidad,
     });
 
     await this.cargarHorarios();
@@ -316,6 +385,7 @@ export class AdminProgramador implements OnInit {
       horaInicio: '',
       horaFin: '',
       todoElDia: false,
+      modalidad: 'virtual',
     };
 
     this.mensajeExito = 'Bloqueo registrado.';
@@ -365,6 +435,7 @@ export class AdminProgramador implements OnInit {
       mensajeRespuesta: a.mensajeRespuesta ?? '',
     });
 
+    this.calcularResumenAsesorias();
     this.mensajeExito = `Asesoría #${a.id} actualizada correctamente`;
 
     setTimeout(() => {

@@ -4,6 +4,7 @@ export interface Disponibilidad {
   id: number;
   programadorId: number;
   tipo: TipoDisponibilidad;
+  modalidad?: 'virtual' | 'presencial';
 
   diaSemana?: number;
   fecha?: string; 

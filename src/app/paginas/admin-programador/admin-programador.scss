@@ -48,6 +48,68 @@ h1 {
   color: #fff;
 }
 
+.resumen-asesorias {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.resumen-card {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.resumen-valor {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0.4rem 0 0;
+  color: #1f2937;
+}
+
+.grafico-barras {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.6rem;
+}
+
+.barra-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.barra-label {
+  width: 110px;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.barra-track {
+  flex: 1;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.barra-fill {
+  display: block;
+  height: 100%;
+  background: #89373d;
+  border-radius: 9999px;
+}
+
+.barra-valor {
+  width: 32px;
+  text-align: right;
+  font-size: 0.85rem;
+  color: #374151;
+}
+
 h2 {
   margin: 0;
   color: #111;
