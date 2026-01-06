@@ -25,6 +25,8 @@ export class AdminDashboard implements OnInit {
   usuarios: (Usuario & { uid: string })[] = [];
   rolesPosibles: RolUsuario[] = ['visitante', 'admin', 'programador'];
   programadorEditandoId: number | null = null;
+  seccionActiva: 'asesorias' | 'programadores' | 'horarios' | 'usuarios' =
+    'usuarios';
 
   nuevoProgramador = {
     nombre: '',
@@ -77,6 +79,12 @@ export class AdminDashboard implements OnInit {
     this.usuarios = await this.usuariosService.getUsuarios();
     console.log('USUARIOS CARGADOS:', this.usuarios);
     await this.cargarAsesorias();
+  }
+
+  cambiarSeccion(
+    seccion: 'asesorias' | 'programadores' | 'horarios' | 'usuarios'
+  ) {
+    this.seccionActiva = seccion;
   }
 
   private minutosDesdeHora(hora: string): number {

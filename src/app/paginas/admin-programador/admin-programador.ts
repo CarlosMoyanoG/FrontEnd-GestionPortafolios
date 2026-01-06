@@ -23,6 +23,8 @@ export class AdminProgramador implements OnInit {
   asesorias: Asesoria[] = [];
   programador: Programador | undefined;
   estadosPosibles: EstadoAsesoria[] = ['pendiente', 'aprobada', 'rechazada'];
+  seccionActiva: 'perfil' | 'asesorias' | 'horarios' | 'proyectos' =
+    'asesorias';
 
   // Perfil
   perfilEditando = false;
@@ -92,6 +94,12 @@ export class AdminProgramador implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.cargarDatos();
+  }
+
+  cambiarSeccion(
+    seccion: 'perfil' | 'asesorias' | 'horarios' | 'proyectos'
+  ) {
+    this.seccionActiva = seccion;
   }
 
   //  Carga inicial

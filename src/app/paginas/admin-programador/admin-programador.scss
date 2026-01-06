@@ -20,6 +20,34 @@ h1 {
   }
 }
 
+.menu-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.menu-item {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  color: #374151;
+  padding: 0.6rem 1rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.menu-item:hover {
+  background: #f3f4f6;
+}
+
+.menu-item.activo {
+  background: #89373d;
+  border-color: #89373d;
+  color: #fff;
+}
+
 h2 {
   margin: 0;
   color: #111;

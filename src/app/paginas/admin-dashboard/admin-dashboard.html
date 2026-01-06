@@ -1,7 +1,42 @@
 <div class="contenedor-panel">
   <h1>Panel de administrador</h1>
 
-  <div class="tarjeta panel-asesorias">
+  <nav class="menu-panel">
+    <button
+      type="button"
+      class="menu-item"
+      [class.activo]="seccionActiva === 'usuarios'"
+      (click)="cambiarSeccion('usuarios')"
+    >
+      Usuarios
+    </button>
+    <button
+      type="button"
+      class="menu-item"
+      [class.activo]="seccionActiva === 'asesorias'"
+      (click)="cambiarSeccion('asesorias')"
+    >
+      Asesorias
+    </button>
+    <button
+      type="button"
+      class="menu-item"
+      [class.activo]="seccionActiva === 'programadores'"
+      (click)="cambiarSeccion('programadores')"
+    >
+      Programadores
+    </button>
+    <button
+      type="button"
+      class="menu-item"
+      [class.activo]="seccionActiva === 'horarios'"
+      (click)="cambiarSeccion('horarios')"
+    >
+      Horarios
+    </button>
+  </nav>
+
+  <div class="tarjeta panel-asesorias" *ngIf="seccionActiva === 'asesorias'">
     <div class="cabecera-tarjeta">
       <h2>Asesorías agendadas</h2>
     </div>
@@ -48,7 +83,7 @@
     </div>
   </div>
 
-  <div class="cuadricula-gestion">
+  <div class="cuadricula-gestion" *ngIf="seccionActiva === 'programadores'">
     <div class="tarjeta panel-programadores">
       <div class="cabecera-tarjeta">
         <h2>Gestión de programadores</h2>
@@ -165,7 +200,9 @@
       </div>
     </div>
 
-    <div class="tarjeta panel-horarios">
+  </div>
+
+  <div class="tarjeta panel-horarios" *ngIf="seccionActiva === 'horarios'">
       <div class="cabecera-tarjeta">
         <h2>Horarios de disponibilidad</h2>
       </div>
@@ -361,9 +398,8 @@
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="tarjeta panel-usuarios">
+  <div class="tarjeta panel-usuarios" *ngIf="seccionActiva === 'usuarios'">
     <div class="cabecera-tarjeta">
       <h2>Gestión de usuarios</h2>
     </div>
@@ -418,4 +454,3 @@
         </div>
     </div>
   </div>
-</div>

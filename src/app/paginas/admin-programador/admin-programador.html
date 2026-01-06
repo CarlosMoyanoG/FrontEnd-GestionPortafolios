@@ -27,7 +27,42 @@
       </div>
     </div>
 
-    <div class="tarjeta">
+    <nav class="menu-panel">
+      <button
+        type="button"
+        class="menu-item"
+        [class.activo]="seccionActiva === 'asesorias'"
+        (click)="cambiarSeccion('asesorias')"
+      >
+        Asesorias
+      </button>
+      <button
+        type="button"
+        class="menu-item"
+        [class.activo]="seccionActiva === 'perfil'"
+        (click)="cambiarSeccion('perfil')"
+      >
+        Perfil
+      </button>
+      <button
+        type="button"
+        class="menu-item"
+        [class.activo]="seccionActiva === 'horarios'"
+        (click)="cambiarSeccion('horarios')"
+      >
+        Horarios
+      </button>
+      <button
+        type="button"
+        class="menu-item"
+        [class.activo]="seccionActiva === 'proyectos'"
+        (click)="cambiarSeccion('proyectos')"
+      >
+        Proyectos
+      </button>
+    </nav>
+
+    <div class="tarjeta" *ngIf="seccionActiva === 'perfil'">
       <div class="cabecera-tarjeta">
         <h2>Mi perfil</h2>
       </div>
@@ -134,7 +169,7 @@
       </div>
     </div>
 
-    <div class="tarjeta">
+    <div class="tarjeta" *ngIf="seccionActiva === 'asesorias'">
       <div class="cabecera-tarjeta">
         <h2>Mis asesorías agendadas</h2>
       </div>
@@ -200,7 +235,7 @@
       </div>
     </div>
 
-        <div class="tarjeta">
+        <div class="tarjeta" *ngIf="seccionActiva === 'horarios'">
       <div class="cabecera-tarjeta">
         <h2>Mis horarios de disponibilidad</h2>
       </div>
@@ -353,7 +388,7 @@
 
 
 
-    <div class="tarjeta">
+    <div class="tarjeta" *ngIf="seccionActiva === 'proyectos'">
       <div class="cabecera-tarjeta">
         <h2>Mis proyectos</h2>
       </div>
