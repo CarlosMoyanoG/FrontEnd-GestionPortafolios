@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 import { Asesoria, EstadoAsesoria } from '../../modelos/asesoria';
 import { Programadores } from '../../servicios/programadores';
@@ -14,7 +15,7 @@ import { Usuarios } from '../../servicios/usuarios';
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './admin-dashboard.html',
   styleUrl: './admin-dashboard.scss',
 })
@@ -25,7 +26,12 @@ export class AdminDashboard implements OnInit {
   usuarios: (Usuario & { uid: string })[] = [];
   rolesPosibles: RolUsuario[] = ['visitante', 'admin', 'programador'];
   programadorEditandoId: number | null = null;
-  seccionActiva: 'asesorias' | 'programadores' | 'horarios' | 'usuarios' =
+  seccionActiva:
+    | 'asesorias'
+    | 'programadores'
+    | 'horarios'
+    | 'usuarios'
+    | 'reportes' =
     'usuarios';
   resumenAsesorias = {
     total: 0,
@@ -92,7 +98,12 @@ export class AdminDashboard implements OnInit {
   }
 
   cambiarSeccion(
-    seccion: 'asesorias' | 'programadores' | 'horarios' | 'usuarios'
+    seccion:
+      | 'asesorias'
+      | 'programadores'
+      | 'horarios'
+      | 'usuarios'
+      | 'reportes'
   ) {
     this.seccionActiva = seccion;
   }

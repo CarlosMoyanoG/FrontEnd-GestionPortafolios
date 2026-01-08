@@ -1,0 +1,67 @@
+<section class="reporte-asesorias">
+  <header class="encabezado">
+    <div>
+      <h1>Reporte de asesorias</h1>
+      <p>Resumen por programador, fecha y estado.</p>
+    </div>
+    <div class="acciones">
+      <a class="secundario" routerLink="/admin">Volver a admin</a>
+      <button type="button" class="secundario" (click)="exportarCsv()">
+        Exportar CSV
+      </button>
+      <button type="button" class="primario" (click)="aplicarFiltros()">Buscar</button>
+      <button type="button" class="secundario" (click)="limpiarFiltros()">Limpiar</button>
+    </div>
+  </header>
+
+  <div class="filtros">
+    <label>
+      Programador
+      <select [(ngModel)]="filtros.programadorId">
+        <option [ngValue]="undefined">Todos</option>
+        <option *ngFor="let p of programadores" [ngValue]="p.id">{{ p.nombre }}</option>
+      </select>
+    </label>
+    <label>
+      Fecha inicio
+      <input type="date" [(ngModel)]="filtros.fechaInicio" />
+    </label>
+    <label>
+      Fecha fin
+      <input type="date" [(ngModel)]="filtros.fechaFin" />
+    </label>
+    <label>
+      Estado
+      <select [(ngModel)]="filtros.estado">
+        <option [ngValue]="undefined">Todos</option>
+        <option *ngFor="let estado of estados" [ngValue]="estado">{{ estado }}</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="estado" *ngIf="cargando">Cargando reporte...</div>
+
+  <div class="tabla" *ngIf="!cargando">
+    <table>
+      <thead>
+        <tr>
+          <th>Programador</th>
+          <th>Fecha</th>
+          <th>Estado</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of reporte">
+          <td>{{ item.nombreProgramador }}</td>
+          <td>{{ item.fecha }}</td>
+          <td>{{ item.estado }}</td>
+          <td class="numero">{{ item.total }}</td>
+        </tr>
+        <tr *ngIf="reporte.length === 0">
+          <td colspan="4">Sin resultados</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

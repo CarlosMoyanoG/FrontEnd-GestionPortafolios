@@ -8,6 +8,9 @@ import { Portafolio } from './paginas/portafolio/portafolio';
 import { adminGuard } from './guards/admin.guard';
 import { programadorGuard } from './guards/programador.guard';
 import { MisAsesoriasCliente } from './paginas/mis-asesorias-cliente/mis-asesorias-cliente';
+import { ReporteAsesorias } from './paginas/reporte-asesorias/reporte-asesorias';
+import { ReporteProyectosUsuario } from './paginas/reporte-proyectos-usuario/reporte-proyectos-usuario';
+import { ReportesDashboard } from './paginas/reportes-dashboard/reportes-dashboard';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'login', pathMatch: 'full'},
@@ -15,7 +18,10 @@ export const routes: Routes = [
     {path: 'agendar', component: Agendar},
     {path: 'login', component: Login},
     {path: 'portafolios/:id', component: Portafolio},
-    { path: 'mis-asesorias', component: MisAsesoriasCliente },
+    {path: 'mis-asesorias', component: MisAsesoriasCliente },
+    {path: 'reporte-asesorias', component: ReporteAsesorias, canActivate: [adminGuard] },
+    {path: 'reporte-proyectos-usuario', component: ReporteProyectosUsuario, canActivate: [adminGuard] },
+    {path: 'reportes', component: ReportesDashboard, canActivate: [adminGuard] },
     
     {
         path: 'admin',

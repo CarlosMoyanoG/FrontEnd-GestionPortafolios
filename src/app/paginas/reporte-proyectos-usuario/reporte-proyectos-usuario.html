@@ -1,0 +1,46 @@
+<section class="reporte-proyectos">
+  <header class="encabezado">
+    <div>
+      <h1>Reporte de proyectos por usuario</h1>
+      <p>Conteo de proyectos creados y activos por programador.</p>
+    </div>
+    <div class="acciones">
+      <a class="secundario" routerLink="/admin">Volver a admin</a>
+      <button type="button" class="secundario" (click)="exportarCsv()">
+        Exportar CSV
+      </button>
+    </div>
+  </header>
+
+  <div class="busqueda">
+    <input type="text" placeholder="Buscar por nombre o email" [(ngModel)]="filtroTexto" />
+  </div>
+
+  <div class="estado" *ngIf="cargando">Cargando reporte...</div>
+
+  <div class="tabla" *ngIf="!cargando">
+    <table>
+      <thead>
+        <tr>
+          <th>Usuario</th>
+          <th>Email</th>
+          <th>ID programador</th>
+          <th>Proyectos creados</th>
+          <th>Proyectos activos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of reporteFiltrado">
+          <td>{{ item.nombreUsuario }}</td>
+          <td>{{ item.email || '-' }}</td>
+          <td>{{ item.programadorId || '-' }}</td>
+          <td class="numero">{{ item.totalProyectos }}</td>
+          <td class="numero">{{ item.proyectosActivos }}</td>
+        </tr>
+        <tr *ngIf="reporteFiltrado.length === 0">
+          <td colspan="5">Sin resultados</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

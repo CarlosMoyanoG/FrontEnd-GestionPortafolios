@@ -34,6 +34,14 @@
     >
       Horarios
     </button>
+    <button
+      type="button"
+      class="menu-item"
+      [class.activo]="seccionActiva === 'reportes'"
+      (click)="cambiarSeccion('reportes')"
+    >
+      Reportes
+    </button>
   </nav>
 
   <div class="tarjeta panel-asesorias" *ngIf="seccionActiva === 'asesorias'">
@@ -471,6 +479,28 @@
         </div>
       </div>
     </div>
+
+  <div class="tarjeta panel-reportes" *ngIf="seccionActiva === 'reportes'">
+    <div class="cabecera-tarjeta">
+      <h2>Reportes administrativos</h2>
+    </div>
+    <div class="cuerpo-tarjeta">
+      <p class="texto-descripcion">
+        Accede a los reportes y genera descargas en PDF o Excel.
+      </p>
+      <div class="acciones-reportes">
+        <a class="boton-accion-pequeno" routerLink="/reportes">
+          Ver dashboard
+        </a>
+        <a class="boton-accion-pequeno" routerLink="/reporte-asesorias">
+          Reporte de asesorias
+        </a>
+        <a class="boton-accion-pequeno" routerLink="/reporte-proyectos-usuario">
+          Reporte de proyectos
+        </a>
+      </div>
+    </div>
+  </div>
 
   <div class="tarjeta panel-usuarios" *ngIf="seccionActiva === 'usuarios'">
     <div class="cabecera-tarjeta">

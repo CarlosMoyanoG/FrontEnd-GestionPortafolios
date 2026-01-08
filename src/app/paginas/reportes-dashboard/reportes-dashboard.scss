@@ -1,0 +1,73 @@
+.reportes-dashboard {
+  display: grid;
+  gap: 24px;
+  padding: 24px;
+}
+
+.encabezado {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.encabezado h1 {
+  margin: 0 0 6px;
+}
+
+.encabezado p {
+  margin: 0;
+  opacity: 0.7;
+}
+
+.acciones {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.accion {
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: #142433;
+  border: 1px solid #142433;
+  color: inherit;
+  text-decoration: none;
+  color: #ffffff;
+}
+
+.accion:hover {
+  border-color: #89373d;
+}
+
+.estado {
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: rgba(33, 37, 45, 0.6);
+}
+
+.tarjetas {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.tarjeta {
+  padding: 16px;
+  border-radius: 14px;
+  background: #89373d;
+  border: 1px solid #89373d;
+  display: grid;
+  gap: 8px;
+  color : #ffffff;
+}
+
+.etiqueta {
+  font-size: 0.85rem;
+  opacity: 0.65;
+}
+
+.valor {
+  font-size: 1.6rem;
+}

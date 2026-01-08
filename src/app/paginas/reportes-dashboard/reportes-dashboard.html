@@ -1,0 +1,49 @@
+<section class="reportes-dashboard">
+  <header class="encabezado">
+    <div>
+      <h1>Reportes administrativos</h1>
+      <p>Panel general con indicadores y accesos rapidos.</p>
+    </div>
+    <div class="acciones">
+      <a class="accion" routerLink="/reporte-asesorias">Reporte de asesorias</a>
+      <a class="accion" routerLink="/reporte-proyectos-usuario">Reporte de proyectos</a>
+    </div>
+  </header>
+
+  <div class="estado" *ngIf="cargando">Cargando indicadores...</div>
+
+  <div class="tarjetas" *ngIf="!cargando && resumen">
+    <div class="tarjeta">
+      <span class="etiqueta">Asesorias totales</span>
+      <strong class="valor">{{ resumen.totalAsesorias }}</strong>
+    </div>
+    <div class="tarjeta">
+      <span class="etiqueta">Pendientes</span>
+      <strong class="valor">{{ resumen.asesoriasPendientes }}</strong>
+    </div>
+    <div class="tarjeta">
+      <span class="etiqueta">Aprobadas</span>
+      <strong class="valor">{{ resumen.asesoriasAprobadas }}</strong>
+    </div>
+    <div class="tarjeta">
+      <span class="etiqueta">Rechazadas</span>
+      <strong class="valor">{{ resumen.asesoriasRechazadas }}</strong>
+    </div>
+    <div class="tarjeta">
+      <span class="etiqueta">Usuarios</span>
+      <strong class="valor">{{ resumen.totalUsuarios }}</strong>
+    </div>
+    <div class="tarjeta">
+      <span class="etiqueta">Programadores</span>
+      <strong class="valor">{{ resumen.totalProgramadores }}</strong>
+    </div>
+    <div class="tarjeta">
+      <span class="etiqueta">Proyectos creados</span>
+      <strong class="valor">{{ resumen.totalProyectos }}</strong>
+    </div>
+    <div class="tarjeta">
+      <span class="etiqueta">Proyectos activos</span>
+      <strong class="valor">{{ resumen.proyectosActivos }}</strong>
+    </div>
+  </div>
+</section>
