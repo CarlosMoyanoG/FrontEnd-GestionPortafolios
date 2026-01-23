@@ -1,0 +1,77 @@
+<section>
+  <h2>Test programadores</h2>
+
+  <form (ngSubmit)="guardar()">
+    <div>
+      <label>ID</label>
+      <input type="number" [(ngModel)]="programador.id" name="id" required />
+    </div>
+    <div>
+      <label>Nombre</label>
+      <input type="text" [(ngModel)]="programador.nombre" name="nombre" required />
+    </div>
+    <div>
+      <label>Especialidad</label>
+      <input type="text" [(ngModel)]="programador.especialidad" name="especialidad" required />
+    </div>
+    <div>
+      <label>Descripcion</label>
+      <textarea [(ngModel)]="programador.descripcion" name="descripcion"></textarea>
+    </div>
+    <div>
+      <label>Foto URL</label>
+      <input type="text" [(ngModel)]="programador.fotoUrl" name="fotoUrl" />
+    </div>
+    <div>
+      <label>Email contacto</label>
+      <input type="email" [(ngModel)]="programador.emailContacto" name="emailContacto" />
+    </div>
+    <div>
+      <label>GitHub URL</label>
+      <input type="text" [(ngModel)]="programador.githubUrl" name="githubUrl" />
+    </div>
+    <div>
+      <label>LinkedIn URL</label>
+      <input type="text" [(ngModel)]="programador.linkedinUrl" name="linkedinUrl" />
+    </div>
+    <div>
+      <label>Sitio web</label>
+      <input type="text" [(ngModel)]="programador.sitioWeb" name="sitioWeb" />
+    </div>
+    <div>
+      <label>Duenio UID</label>
+      <input type="text" [(ngModel)]="programador.duenioUid" name="duenioUid" />
+    </div>
+
+    <button type="submit">{{ enEdicion ? 'Actualizar' : 'Crear' }}</button>
+    <button type="button" (click)="limpiar()">Limpiar</button>
+  </form>
+
+  <p *ngIf="mensaje">{{ mensaje }}</p>
+  <p *ngIf="error">{{ error }}</p>
+
+  <div *ngIf="cargando">Cargando...</div>
+  <table *ngIf="!cargando">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Especialidad</th>
+        <th>Email</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of programadores">
+        <td>{{ p.id }}</td>
+        <td>{{ p.nombre }}</td>
+        <td>{{ p.especialidad }}</td>
+        <td>{{ p.emailContacto || '-' }}</td>
+        <td>
+          <button type="button" (click)="editar(p)">Editar</button>
+          <button type="button" (click)="eliminar(p.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>

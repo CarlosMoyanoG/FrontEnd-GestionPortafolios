@@ -1,0 +1,77 @@
+<section>
+  <h2>Test asesorias</h2>
+
+  <form (ngSubmit)="guardar()">
+    <div>
+      <label>ID</label>
+      <input type="number" [(ngModel)]="asesoria.id" name="id" required />
+    </div>
+    <div>
+      <label>Programador ID</label>
+      <input type="number" [(ngModel)]="asesoria.programadorId" name="programadorId" />
+    </div>
+    <div>
+      <label>Nombre cliente</label>
+      <input type="text" [(ngModel)]="asesoria.nombreCliente" name="nombreCliente" required />
+    </div>
+    <div>
+      <label>Email cliente</label>
+      <input type="email" [(ngModel)]="asesoria.emailCliente" name="emailCliente" required />
+    </div>
+    <div>
+      <label>Fecha</label>
+      <input type="date" [(ngModel)]="asesoria.fecha" name="fecha" required />
+    </div>
+    <div>
+      <label>Hora</label>
+      <input type="time" [(ngModel)]="asesoria.hora" name="hora" required />
+    </div>
+    <div>
+      <label>Descripcion proyecto</label>
+      <textarea [(ngModel)]="asesoria.descripcionProyecto" name="descripcionProyecto"></textarea>
+    </div>
+    <div>
+      <label>Estado</label>
+      <select [(ngModel)]="asesoria.estado" name="estado">
+        <option *ngFor="let estado of estados" [ngValue]="estado">{{ estado }}</option>
+      </select>
+    </div>
+    <div>
+      <label>Mensaje respuesta</label>
+      <input type="text" [(ngModel)]="asesoria.mensajeRespuesta" name="mensajeRespuesta" />
+    </div>
+
+    <button type="submit">{{ enEdicion ? 'Actualizar' : 'Crear' }}</button>
+    <button type="button" (click)="limpiar()">Limpiar</button>
+  </form>
+
+  <p *ngIf="mensaje">{{ mensaje }}</p>
+  <p *ngIf="error">{{ error }}</p>
+
+  <div *ngIf="cargando">Cargando...</div>
+  <table *ngIf="!cargando">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Programador ID</th>
+        <th>Cliente</th>
+        <th>Fecha</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let a of asesorias">
+        <td>{{ a.id }}</td>
+        <td>{{ a.programadorId || '-' }}</td>
+        <td>{{ a.nombreCliente }}</td>
+        <td>{{ a.fecha }}</td>
+        <td>{{ a.estado }}</td>
+        <td>
+          <button type="button" (click)="editar(a)">Editar</button>
+          <button type="button" (click)="eliminar(a.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>

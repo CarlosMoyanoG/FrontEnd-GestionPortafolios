@@ -1,0 +1,79 @@
+<section>
+  <h2>Test disponibilidades</h2>
+
+  <form (ngSubmit)="guardar()">
+    <div>
+      <label>ID</label>
+      <input type="number" [(ngModel)]="disponibilidad.id" name="id" required />
+    </div>
+    <div>
+      <label>Programador ID</label>
+      <input type="number" [(ngModel)]="disponibilidad.programadorId" name="programadorId" />
+    </div>
+    <div>
+      <label>Tipo</label>
+      <select [(ngModel)]="disponibilidad.tipo" name="tipo">
+        <option *ngFor="let tipo of tipos" [ngValue]="tipo">{{ tipo }}</option>
+      </select>
+    </div>
+    <div>
+      <label>Dia semana (0-6)</label>
+      <input type="number" [(ngModel)]="disponibilidad.diaSemana" name="diaSemana" />
+    </div>
+    <div>
+      <label>Fecha</label>
+      <input type="date" [(ngModel)]="disponibilidad.fecha" name="fecha" />
+    </div>
+    <div>
+      <label>Hora</label>
+      <input type="time" [(ngModel)]="disponibilidad.hora" name="hora" />
+    </div>
+    <div>
+      <label>Hora inicio</label>
+      <input type="time" [(ngModel)]="disponibilidad.horaInicio" name="horaInicio" />
+    </div>
+    <div>
+      <label>Hora fin</label>
+      <input type="time" [(ngModel)]="disponibilidad.horaFin" name="horaFin" />
+    </div>
+    <div>
+      <label>Modalidad</label>
+      <select [(ngModel)]="disponibilidad.modalidad" name="modalidad">
+        <option *ngFor="let m of modalidades" [ngValue]="m">{{ m }}</option>
+      </select>
+    </div>
+
+    <button type="submit">{{ enEdicion ? 'Actualizar' : 'Crear' }}</button>
+    <button type="button" (click)="limpiar()">Limpiar</button>
+  </form>
+
+  <p *ngIf="mensaje">{{ mensaje }}</p>
+  <p *ngIf="error">{{ error }}</p>
+
+  <div *ngIf="cargando">Cargando...</div>
+  <table *ngIf="!cargando">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Programador ID</th>
+        <th>Tipo</th>
+        <th>Fecha</th>
+        <th>Modalidad</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let d of disponibilidades">
+        <td>{{ d.id }}</td>
+        <td>{{ d.programadorId || '-' }}</td>
+        <td>{{ d.tipo }}</td>
+        <td>{{ d.fecha || '-' }}</td>
+        <td>{{ d.modalidad || '-' }}</td>
+        <td>
+          <button type="button" (click)="editar(d)">Editar</button>
+          <button type="button" (click)="eliminar(d.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>

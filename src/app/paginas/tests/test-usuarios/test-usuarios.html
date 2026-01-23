@@ -1,0 +1,65 @@
+<section>
+  <h2>Test usuarios</h2>
+
+  <form (ngSubmit)="guardar()">
+    <div>
+      <label>ID</label>
+      <input type="number" [(ngModel)]="usuario.id" name="id" required />
+    </div>
+    <div>
+      <label>Nombre</label>
+      <input type="text" [(ngModel)]="usuario.nombre" name="nombre" required />
+    </div>
+    <div>
+      <label>Email</label>
+      <input type="email" [(ngModel)]="usuario.email" name="email" />
+    </div>
+    <div>
+      <label>Foto URL</label>
+      <input type="text" [(ngModel)]="usuario.fotoUrl" name="fotoUrl" />
+    </div>
+    <div>
+      <label>Rol</label>
+      <select [(ngModel)]="usuario.rol" name="rol">
+        <option *ngFor="let rol of roles" [ngValue]="rol">{{ rol }}</option>
+      </select>
+    </div>
+    <div>
+      <label>Programador ID</label>
+      <input type="number" [(ngModel)]="usuario.programadorId" name="programadorId" />
+    </div>
+
+    <button type="submit">{{ enEdicion ? 'Actualizar' : 'Crear' }}</button>
+    <button type="button" (click)="limpiar()">Limpiar</button>
+  </form>
+
+  <p *ngIf="mensaje">{{ mensaje }}</p>
+  <p *ngIf="error">{{ error }}</p>
+
+  <div *ngIf="cargando">Cargando...</div>
+  <table *ngIf="!cargando">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Rol</th>
+        <th>Programador ID</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let u of usuarios">
+        <td>{{ u.id }}</td>
+        <td>{{ u.nombre }}</td>
+        <td>{{ u.email || '-' }}</td>
+        <td>{{ u.rol }}</td>
+        <td>{{ u.programadorId || '-' }}</td>
+        <td>
+          <button type="button" (click)="editar(u)">Editar</button>
+          <button type="button" (click)="eliminar(u.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>

@@ -42,6 +42,14 @@
     >
       Reportes
     </button>
+    <button
+      type="button"
+      class="menu-item"
+      [class.activo]="seccionActiva === 'tests'"
+      (click)="cambiarSeccion('tests')"
+    >
+      Tests
+    </button>
   </nav>
 
   <div class="tarjeta panel-asesorias" *ngIf="seccionActiva === 'asesorias'">
@@ -498,6 +506,24 @@
         <a class="boton-accion-pequeno" routerLink="/reporte-proyectos-usuario">
           Reporte de proyectos
         </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="tarjeta panel-tests" *ngIf="seccionActiva === 'tests'">
+    <div class="cabecera-tarjeta">
+      <h2>Tests de API</h2>
+    </div>
+    <div class="cuerpo-tarjeta">
+      <p class="texto-descripcion">
+        Accesos rapidos para probar CRUD contra el backend.
+      </p>
+      <div class="acciones-tests">
+        <a class="boton-accion-pequeno" routerLink="/tests/usuarios">Usuarios</a>
+        <a class="boton-accion-pequeno" routerLink="/tests/programadores">Programadores</a>
+        <a class="boton-accion-pequeno" routerLink="/tests/proyectos">Proyectos</a>
+        <a class="boton-accion-pequeno" routerLink="/tests/asesorias">Asesorias</a>
+        <a class="boton-accion-pequeno" routerLink="/tests/disponibilidades">Disponibilidades</a>
       </div>
     </div>
   </div>

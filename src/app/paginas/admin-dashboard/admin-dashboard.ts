@@ -31,7 +31,8 @@ export class AdminDashboard implements OnInit {
     | 'programadores'
     | 'horarios'
     | 'usuarios'
-    | 'reportes' =
+    | 'reportes'
+    | 'tests' =
     'usuarios';
   resumenAsesorias = {
     total: 0,
@@ -104,6 +105,7 @@ export class AdminDashboard implements OnInit {
       | 'horarios'
       | 'usuarios'
       | 'reportes'
+      | 'tests'
   ) {
     this.seccionActiva = seccion;
   }

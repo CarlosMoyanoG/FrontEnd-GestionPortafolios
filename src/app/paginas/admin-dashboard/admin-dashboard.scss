@@ -459,6 +459,16 @@ input:focus, select:focus, textarea:focus {
   text-decoration: none;
 }
 
+.acciones-tests {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.acciones-tests a {
+  text-decoration: none;
+}
+
 .acciones-programador {
   margin-top: 0.8rem;
   display: flex;

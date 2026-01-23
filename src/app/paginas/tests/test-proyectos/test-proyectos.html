@@ -1,0 +1,73 @@
+<section>
+  <h2>Test proyectos</h2>
+
+  <form (ngSubmit)="guardar()">
+    <div>
+      <label>ID</label>
+      <input type="number" [(ngModel)]="proyecto.id" name="id" required />
+    </div>
+    <div>
+      <label>Nombre</label>
+      <input type="text" [(ngModel)]="proyecto.nombre" name="nombre" required />
+    </div>
+    <div>
+      <label>Descripcion</label>
+      <textarea [(ngModel)]="proyecto.descripcion" name="descripcion"></textarea>
+    </div>
+    <div>
+      <label>Seccion</label>
+      <select [(ngModel)]="proyecto.seccion" name="seccion">
+        <option *ngFor="let s of secciones" [ngValue]="s">{{ s }}</option>
+      </select>
+    </div>
+    <div>
+      <label>Participacion</label>
+      <select [(ngModel)]="proyecto.participacion" name="participacion">
+        <option *ngFor="let p of participaciones" [ngValue]="p">{{ p }}</option>
+      </select>
+    </div>
+    <div>
+      <label>Tecnologias (separadas por coma)</label>
+      <input type="text" [(ngModel)]="tecnologiasTexto" name="tecnologias" />
+    </div>
+    <div>
+      <label>Repo URL</label>
+      <input type="text" [(ngModel)]="proyecto.repoUrl" name="repoUrl" />
+    </div>
+    <div>
+      <label>Demo URL</label>
+      <input type="text" [(ngModel)]="proyecto.demoUrl" name="demoUrl" />
+    </div>
+
+    <button type="submit">{{ enEdicion ? 'Actualizar' : 'Crear' }}</button>
+    <button type="button" (click)="limpiar()">Limpiar</button>
+  </form>
+
+  <p *ngIf="mensaje">{{ mensaje }}</p>
+  <p *ngIf="error">{{ error }}</p>
+
+  <div *ngIf="cargando">Cargando...</div>
+  <table *ngIf="!cargando">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Seccion</th>
+        <th>Participacion</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of proyectos">
+        <td>{{ p.id }}</td>
+        <td>{{ p.nombre }}</td>
+        <td>{{ p.seccion }}</td>
+        <td>{{ p.participacion }}</td>
+        <td>
+          <button type="button" (click)="editar(p)">Editar</button>
+          <button type="button" (click)="eliminar(p.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
