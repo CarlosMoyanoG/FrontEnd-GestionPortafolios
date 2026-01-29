@@ -8,7 +8,7 @@ import { Usuario } from '../../domain/models';
 })
 export class GestionUsuario {
   private http = inject(HttpClient);
-  private urlApi = 'http://127.0.0.1:8080/GestorProyectos/api/usuario';
+  private urlApi = 'http://localhost:8002/api/usuarios';
 
   listar(): Observable<Usuario[]> {
     return this.http.get<Usuario[]>(this.urlApi);

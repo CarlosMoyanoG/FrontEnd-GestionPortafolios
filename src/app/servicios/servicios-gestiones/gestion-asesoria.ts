@@ -8,7 +8,7 @@ import { Asesoria } from '../../domain/models';
 })
 export class GestionAsesoria {
   private http = inject(HttpClient);
-  private urlApi = 'http://127.0.0.1:8080/GestorProyectos/api/asesoria';
+  private urlApi = 'http://localhost:8081/api/asesorias';
 
   listar(): Observable<Asesoria[]> {
     return this.http.get<Asesoria[]>(this.urlApi);
