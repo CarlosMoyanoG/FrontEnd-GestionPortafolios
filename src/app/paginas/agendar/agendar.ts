@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { Programador } from '../../modelos/programador';
 import { Programadores } from '../../servicios/programadores';
 import { Asesorias } from '../../servicios/asesorias';
@@ -37,7 +37,7 @@ export class Agendar {
 
   constructor(
     private programadoresService: Programadores,
-    private asesoriasService: Asesorias,
+    @Inject(Asesorias) private asesoriasService: Asesorias,
     private disponibilidadesService: Disponibilidades,
     private route: ActivatedRoute,
     private auth: Autenticacion

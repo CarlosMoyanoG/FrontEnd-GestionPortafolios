@@ -1,128 +1,172 @@
 import { Injectable } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { Programador } from '../modelos/programador';
-
-import {
-  Firestore,
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-  updateDoc,
-  deleteField,
-  deleteDoc,
-  DocumentReference,
-  DocumentData,
-} from '@angular/fire/firestore';
 import { Proyecto } from '../modelos/proyecto';
+import { GestionProgramador } from './servicios-gestiones/gestion-programador';
 
 @Injectable({
   providedIn: 'root',
 })
-
 export class Programadores {
+  constructor(private gestionProgramador: GestionProgramador) {}
 
-  private colRef;
+  private normalizarProyecto(data: Proyecto | Record<string, any>): Proyecto {
+    const p = data as Record<string, any>;
+    const id = p['id'] ?? p['proy_id'] ?? p['proyId'];
+    const tecnologias =
+      p['tecnologias'] ??
+      p['proy_tecnologias'] ??
+      p['proyTecnologias'] ??
+      p['proy_tecnologia'];
 
-  constructor(private firestore: Firestore) {
-    this.colRef = collection(this.firestore, 'programadores');
+    return {
+      id: id != null ? Number(id) : 0,
+      nombre: p['nombre'] ?? p['proy_nombre'] ?? p['proyNombre'] ?? '',
+      descripcion:
+        p['descripcion'] ?? p['proy_descripcion'] ?? p['proyDescripcion'] ?? '',
+      seccion:
+        p['seccion'] ?? p['proy_seccion'] ?? p['proySeccion'] ?? 'academico',
+      participacion:
+        p['participacion'] ??
+        p['proy_participacion'] ??
+        p['proyParticipacion'] ??
+        'Frontend',
+      tecnologias: Array.isArray(tecnologias)
+        ? tecnologias
+        : tecnologias
+        ? [String(tecnologias)]
+        : [],
+      repoUrl: p['repoUrl'] ?? p['proy_repoUrl'] ?? p['proyRepoUrl'],
+      demoUrl: p['demoUrl'] ?? p['proy_demoUrl'] ?? p['proyDemoUrl'],
+    };
+  }
+
+  private normalizarProgramador(
+    data: Programador | Record<string, any>
+  ): Programador {
+    const p = data as Record<string, any>;
+    const id = p['id'] ?? p['prog_id'] ?? p['progId'];
+    const proyectos = p['proyectos'] ?? [];
+
+    return {
+      id: id != null ? Number(id) : 0,
+      nombre: p['nombre'] ?? p['pro_nombre'] ?? p['proNombre'] ?? '',
+      especialidad:
+        p['especialidad'] ?? p['pro_especialidad'] ?? p['proEspecialidad'] ?? '',
+      descripcion:
+        p['descripcion'] ?? p['pro_descripcion'] ?? p['proDescripcion'] ?? '',
+      fotoUrl: p['fotoUrl'] ?? p['pro_fotoUrl'] ?? p['proFotoUrl'],
+      emailContacto:
+        p['emailContacto'] ??
+        p['pro_emailContacto'] ??
+        p['proEmailContacto'],
+      githubUrl: p['githubUrl'] ?? p['pro_githubUrl'] ?? p['proGithubUrl'],
+      linkedinUrl:
+        p['linkedinUrl'] ?? p['pro_linkedinUrl'] ?? p['proLinkedinUrl'],
+      sitioWeb: p['sitioWeb'] ?? p['pro_sitioWeb'] ?? p['proSitioWeb'],
+      duenioUid: p['duenioUid'] ?? p['pro_duenioUid'] ?? p['proDuenioUid'],
+      proyectos: Array.isArray(proyectos)
+        ? proyectos.map((proj: Proyecto | Record<string, any>) =>
+            this.normalizarProyecto(proj)
+          )
+        : [],
+    };
   }
 
   async getProgramadores(): Promise<Programador[]> {
-    const snap = await getDocs(this.colRef);
-    return snap.docs.map(d => d.data() as Programador);
+    const data = await firstValueFrom(this.gestionProgramador.listar());
+    return data.map((p) => this.normalizarProgramador(p));
   }
 
   async getProgramadorById(id: number): Promise<Programador | undefined> {
-    const q = query(this.colRef, where('id', '==', id));
-    const snap = await getDocs(q);
-    if (snap.empty) {
+    try {
+      const data = await firstValueFrom(this.gestionProgramador.obtener(id));
+      return this.normalizarProgramador(data);
+    } catch {
       return undefined;
     }
-    return snap.docs[0].data() as Programador;
   }
 
-  async crearProgramador(data: Omit<Programador, 'id' | 'duenioUid'>): Promise<Programador> {
+  async crearProgramador(
+    data: Omit<Programador, 'id' | 'duenioUid'>
+  ): Promise<Programador> {
     const programador: Programador = {
-      id: Date.now(),
       ...data,
-    };
-
-    await addDoc(this.colRef, programador);
-    return programador;
+    } as Programador;
+    const creado = await firstValueFrom(this.gestionProgramador.crear(programador));
+    return this.normalizarProgramador(creado);
   }
 
-  private async getDocRefPorId(idProgramador: number): Promise<DocumentReference<DocumentData> | null> {
-    const q = query(this.colRef, where('id', '==', idProgramador));
-    const snap = await getDocs(q);
-
-    if (snap.empty) {
-      console.warn('No se encontró programador con id', idProgramador);
+  private async getPorId(idProgramador: number): Promise<Programador | null> {
+    try {
+      const data = await firstValueFrom(this.gestionProgramador.obtener(idProgramador));
+      return this.normalizarProgramador(data);
+    } catch {
+      console.warn('No se encontrÃ³ programador con id', idProgramador);
       return null;
     }
-
-    return snap.docs[0].ref;
   }
 
-  async actualizarDuenioUid(idProgramador: number, duenioUid?: string | null): Promise<void> {
-    const docRef = await this.getDocRefPorId(idProgramador);
-    if (!docRef) return;
+  async actualizarDuenioUid(
+    idProgramador: number,
+    duenioUid?: string | null
+  ): Promise<void> {
+    const programador = await this.getPorId(idProgramador);
+    if (!programador) return;
 
-    const cambios: any = {};
-
-    if (duenioUid) {
-      cambios.duenioUid = duenioUid;
-    } else {
-      cambios.duenioUid = deleteField();
-    }
-
-    await updateDoc(docRef, cambios);
+    programador.duenioUid = duenioUid ?? undefined;
+    await firstValueFrom(this.gestionProgramador.actualizar(programador));
   }
 
-  async actualizarProyectosProgramador(idProgramador: number,proyectos: Proyecto[]): Promise<void> {
-    const docRef = await this.getDocRefPorId(idProgramador);
-    if (!docRef) return;
+  async actualizarProyectosProgramador(
+    idProgramador: number,
+    proyectos: Proyecto[]
+  ): Promise<void> {
+    const programador = await this.getPorId(idProgramador);
+    if (!programador) return;
 
-    await updateDoc(docRef, { proyectos });
+    const proyectosPayload = proyectos.map((p) => {
+      const copy: any = { ...p };
+      if (
+        copy.id == null ||
+        Number.isNaN(Number(copy.id)) ||
+        Number(copy.id) <= 0 ||
+        Number(copy.id) >= 1000000000000
+      ) {
+        delete copy.id;
+      }
+      return copy as Proyecto;
+    });
+
+    programador.proyectos = proyectosPayload;
+    await firstValueFrom(this.gestionProgramador.actualizar(programador));
   }
 
   async actualizarProgramador(programador: Programador): Promise<void> {
-    const docRef = await this.getDocRefPorId(programador.id);
-    if (!docRef) return;
-
-    await updateDoc(docRef, {
-      nombre: programador.nombre,
-      especialidad: programador.especialidad,
-      descripcion: programador.descripcion,
-      fotoUrl: programador.fotoUrl ?? null,
-      emailContacto: programador.emailContacto ?? null,
-      githubUrl: programador.githubUrl ?? null,
-      linkedinUrl: programador.linkedinUrl ?? null,
-      sitioWeb: programador.sitioWeb ?? null,
-    });
+    await firstValueFrom(this.gestionProgramador.actualizar(programador));
   }
 
   async eliminarProgramador(idProgramador: number): Promise<void> {
-    const docRef = await this.getDocRefPorId(idProgramador);
-    if (!docRef) return;
-
-    await deleteDoc(docRef);
+    await firstValueFrom(this.gestionProgramador.eliminar(idProgramador));
   }
 
-  async actualizarDuenioYContacto(programadorId: number, duenioUid: string | null,email?: string | null, fotoUrl?: string): Promise<void> {
+  async actualizarDuenioYContacto(
+    programadorId: number,
+    duenioUid: string | null,
+    email?: string | null,
+    fotoUrl?: string
+  ): Promise<void> {
+    const programador = await this.getPorId(programadorId);
+    if (!programador) return;
 
-    const ref = await this.getDocRefPorId(programadorId);
-    if (!ref) return;
-
-    const data: any = { duenioUid };
-
+    programador.duenioUid = duenioUid ?? undefined;
     if (email !== undefined) {
-      data.emailContacto = email;
+      programador.emailContacto = email ?? undefined;
     }
     if (fotoUrl !== undefined) {
-      data.fotoUrl = fotoUrl;
+      programador.fotoUrl = fotoUrl;
     }
 
-    await updateDoc(ref, data);
+    await firstValueFrom(this.gestionProgramador.actualizar(programador));
   }
 }

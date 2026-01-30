@@ -1,94 +1,129 @@
 import { Injectable } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { Asesoria } from '../modelos/asesoria';
-
-import {
-  Firestore,
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  where,
-  updateDoc,
-} from '@angular/fire/firestore';
+import { GestionAsesoria } from './servicios-gestiones/gestion-asesoria';
 
 @Injectable({
   providedIn: 'root',
 })
-
 export class Asesorias {
+  constructor(private gestionAsesoria: GestionAsesoria) {}
 
-  private coleccionRef;
+  private normalizarAsesoria(data: Asesoria | Record<string, any>): Asesoria {
+    const a = data as Record<string, any>;
+    const id = a['id'] ?? a['ase_id'] ?? a['aseId'];
+    const programadorId =
+      a['programadorId'] ??
+      a['ase_progId'] ??
+      a['aseProgId'] ??
+      a['prog_id'];
 
-  constructor(private firestore: Firestore) {
-    this.coleccionRef = collection(this.firestore, 'asesorias');
+    return {
+      id: id != null ? Number(id) : undefined,
+      programadorId:
+        programadorId != null && programadorId !== ''
+          ? Number(programadorId)
+          : undefined,
+      nombreCliente:
+        a['nombreCliente'] ??
+        a['ase_nombreCliente'] ??
+        a['aseNombreCliente'] ??
+        '',
+      emailCliente:
+        a['emailCliente'] ??
+        a['ase_emailCliente'] ??
+        a['aseEmailCliente'] ??
+        '',
+      fecha: a['fecha'] ?? a['ase_fecha'] ?? a['aseFecha'] ?? '',
+      hora: a['hora'] ?? a['ase_hora'] ?? a['aseHora'] ?? '',
+      descripcionProyecto:
+        a['descripcionProyecto'] ??
+        a['ase_descripcionProyecto'] ??
+        a['aseDescripcionProyecto'] ??
+        '',
+      estado:
+        a['estado'] ??
+        a['ase_estado'] ??
+        a['aseEstado'] ??
+        'pendiente',
+      mensajeRespuesta:
+        a['mensajeRespuesta'] ??
+        a['ase_mensajeRespuesta'] ??
+        a['aseMensajeRespuesta'],
+    };
   }
 
   // CREAR ASESORIA
+  async crearAsesoria(
+    nueva: Omit<Asesoria, 'id' | 'estado' | 'programadorId'> & {
+      programadorId: number;
+    }
+  ): Promise<Asesoria> {
+    if (nueva.programadorId == null) {
+      throw new Error('Se requiere programadorId para crear la asesoría.');
+    }
 
-  async crearAsesoria(nueva: Omit<Asesoria, 'id' | 'estado'>): Promise<Asesoria> {
-    // Validación preventiva: evitar doble reserva en misma fecha/hora para el mismo programador
-    const conflictoRef = query(
-      this.coleccionRef,
-      where('programadorId', '==', nueva.programadorId),
-      where('fecha', '==', nueva.fecha),
-      where('hora', '==', nueva.hora)
+    // ValidaciÃ³n preventiva: evitar doble reserva en misma fecha/hora para el mismo programador
+    const asesorias = await this.getAsesoriasPorProgramadorYFecha(
+      nueva.programadorId,
+      nueva.fecha
     );
-    const conflictoSnap = await getDocs(conflictoRef);
-    const existeConflicto = conflictoSnap.docs.some((d) => {
-      const a = d.data() as Asesoria;
-      return a.estado !== 'rechazada';
-    });
+    const existeConflicto = asesorias.some(
+      (a) => a.hora === nueva.hora && a.estado !== 'rechazada'
+    );
 
     if (existeConflicto) {
-      throw new Error('La hora seleccionada ya está ocupada para este programador.');
+      throw new Error(
+        'La hora seleccionada ya estÃ¡ ocupada para este programador.'
+      );
     }
 
     const asesoria: Asesoria = {
-      id: Date.now(),
       estado: 'pendiente',
       ...nueva,
     };
 
-    await addDoc(this.coleccionRef, asesoria);
-    console.log('Asesoría creada:', asesoria);
-    return asesoria;
+    const creada = await firstValueFrom(this.gestionAsesoria.crear(asesoria));
+    console.log('AsesorÃ­a creada:', creada);
+    return this.normalizarAsesoria(creada);
   }
 
   // OBTENER ASESORIAS
-
   async getAsesorias(): Promise<Asesoria[]> {
-    const snap = await getDocs(this.coleccionRef);
-    return snap.docs.map((d) => d.data() as Asesoria);
+    const data = await firstValueFrom(this.gestionAsesoria.listar());
+    return data.map((a) => this.normalizarAsesoria(a));
   }
 
   // OBTENER ASESORIAS POR CRITERIOS
-
   async getAsesoriasPorEmailCliente(email: string): Promise<Asesoria[]> {
-    const qRef = query(this.coleccionRef, where('emailCliente', '==', email));
-    const snap = await getDocs(qRef);
-    return snap.docs.map((d) => d.data() as Asesoria);
+    const asesorias = await this.getAsesorias();
+    return asesorias.filter((a) => a.emailCliente === email);
   }
 
-  async getAsesoriasPorProgramadorYFecha(programadorId: number,fecha: string): Promise<Asesoria[]> {
-    const qRef = query(this.coleccionRef, where('programadorId', '==', programadorId), where('fecha', '==', fecha));
-    const snap = await getDocs(qRef);
-    return snap.docs.map((d) => d.data() as Asesoria);
+  async getAsesoriasPorProgramadorYFecha(
+    programadorId: number,
+    fecha: string
+  ): Promise<Asesoria[]> {
+    const asesorias = await this.getAsesorias();
+    return asesorias.filter(
+      (a) => a.programadorId === programadorId && a.fecha === fecha
+    );
   }
 
   // ACTUALIZAR ASESORIA
-
-  async actualizarAsesoria(id: number,cambios: Partial<Asesoria>): Promise<void> {
-    const qRef = query(this.coleccionRef, where('id', '==', id));
-    const snap = await getDocs(qRef);
-
-    if (snap.empty) {
-      console.warn('No se encontró asesoria con id', id);
+  async actualizarAsesoria(
+    id: number,
+    cambios: Partial<Asesoria>
+  ): Promise<void> {
+    const asesorias = await this.getAsesorias();
+    const existente = asesorias.find((a) => a.id === id);
+    if (!existente) {
+      console.warn('No se encontrÃ³ asesoria con id', id);
       return;
     }
 
-    const docRef = snap.docs[0].ref;
-    await updateDoc(docRef, cambios as any);
-
-    console.log('Asesoría actualizada en Firestore:', id, cambios);
+    const actualizada: Asesoria = { ...existente, ...cambios };
+    await firstValueFrom(this.gestionAsesoria.actualizar(actualizada));
+    console.log('AsesorÃ­a actualizada:', id, cambios);
   }
 }

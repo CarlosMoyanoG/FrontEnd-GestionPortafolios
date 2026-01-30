@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Usuario, RolUsuario } from '../../../domain/models';
+import { Usuario, RolUsuario } from '../../../modelos/usuario';
 import { GestionUsuario } from '../../../servicios/servicios-gestiones/gestion-usuario';
 
 @Component({
@@ -25,7 +25,7 @@ export class TestUsuarios implements OnInit {
     email: '',
     fotoUrl: '',
     rol: 'visitante',
-    programadorId: null,
+    programadorId: undefined,
   };
 
   constructor(private usuarioService: GestionUsuario) {}
@@ -53,7 +53,7 @@ export class TestUsuarios implements OnInit {
       programadorId:
         this.usuario.programadorId != null && this.usuario.programadorId !== ('' as any)
           ? Number(this.usuario.programadorId)
-          : null,
+          : undefined,
     };
 
     if (!this.enEdicion) {
@@ -98,7 +98,7 @@ export class TestUsuarios implements OnInit {
       email: '',
       fotoUrl: '',
       rol: 'visitante',
-      programadorId: null,
+      programadorId: undefined,
     };
     this.enEdicion = false;
   }

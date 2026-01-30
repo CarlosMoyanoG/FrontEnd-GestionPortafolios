@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Asesoria, EstadoAsesoria } from '../../../domain/models';
+import { Asesoria, EstadoAsesoria } from '../../../modelos/asesoria';
 import { GestionAsesoria } from '../../../servicios/servicios-gestiones/gestion-asesoria';
 
 @Component({
@@ -21,7 +21,7 @@ export class TestAsesorias implements OnInit {
 
   asesoria: Asesoria = {
     id: 0,
-    programadorId: null,
+    programadorId: undefined,
     nombreCliente: '',
     emailCliente: '',
     fecha: '',
@@ -53,13 +53,17 @@ export class TestAsesorias implements OnInit {
   guardar(): void {
     this.mensaje = '';
     this.error = '';
+    const id =
+      this.asesoria.id != null && this.asesoria.id !== ('' as any)
+        ? Number(this.asesoria.id)
+        : undefined;
     const payload: Asesoria = {
       ...this.asesoria,
-      id: Number(this.asesoria.id),
+      id,
       programadorId:
         this.asesoria.programadorId != null && this.asesoria.programadorId !== ('' as any)
           ? Number(this.asesoria.programadorId)
-          : null,
+          : undefined,
     };
 
     if (!this.enEdicion) {
@@ -85,9 +89,10 @@ export class TestAsesorias implements OnInit {
     this.enEdicion = true;
   }
 
-  eliminar(id: number): void {
+  eliminar(id?: number): void {
     this.mensaje = '';
     this.error = '';
+    if (id == null) return;
     this.asesoriaService.eliminar(id).subscribe({
       next: () => {
         this.mensaje = 'Asesoria eliminada.';
@@ -100,7 +105,7 @@ export class TestAsesorias implements OnInit {
   limpiar(): void {
     this.asesoria = {
       id: 0,
-      programadorId: null,
+      programadorId: undefined,
       nombreCliente: '',
       emailCliente: '',
       fecha: '',

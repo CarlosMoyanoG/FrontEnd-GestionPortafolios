@@ -121,7 +121,7 @@ export class AdminDashboard implements OnInit {
     const listaProgramadores = this.programadores;
     const listaAsesorias: Asesoria[] = await this.asesoriasService.getAsesorias();
 
-    this.asesorias = listaAsesorias.map((asesoria) => {1
+    this.asesorias = listaAsesorias.map((asesoria) => {
       const programadorEncontrado = listaProgramadores.find(
         (p) => p.id === asesoria.programadorId
       );
@@ -340,11 +340,13 @@ export class AdminDashboard implements OnInit {
     );
     if (!confirmar) return;
 
+    if (d.id == null) return;
     await this.disponibilidadesService.eliminarPorId(d.id);
     this.disponibilidades = await this.disponibilidadesService.getTodas();
   }
 
-  obtenerNombreProgramador(id: number): string {
+  obtenerNombreProgramador(id?: number): string {
+    if (id == null) return 'Sin asignar';
     const programador = this.programadores.find((p) => p.id === id);
     return programador ? programador.nombre : 'ID ' + id;
   }

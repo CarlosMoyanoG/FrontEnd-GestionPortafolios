@@ -7,7 +7,7 @@ export type TipoParticipacion =
   | 'Fullstack';
 
 export interface Proyecto {
-  id: number;
+  id?: number;
   nombre: string;
   descripcion: string;
   seccion: TipoSeccionProyecto;    

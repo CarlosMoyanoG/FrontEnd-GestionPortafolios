@@ -46,6 +46,9 @@ export class ReportesService {
 
     const nombrePorId = new Map(programadores.map(p => [p.id, p.nombre]));
     const filtradas = asesorias.filter(a => {
+      if (a.programadorId == null) {
+        return false;
+      }
       if (filtro.programadorId != null && a.programadorId !== filtro.programadorId) {
         return false;
       }
@@ -61,7 +64,11 @@ export class ReportesService {
     const acumulado = new Map<string, ReporteAsesoria>();
 
     for (const asesoria of filtradas) {
-      const key = `${asesoria.programadorId}-${asesoria.fecha}-${asesoria.estado}`;
+      const programadorId = asesoria.programadorId;
+      if (programadorId == null) {
+        continue;
+      }
+      const key = `${programadorId}-${asesoria.fecha}-${asesoria.estado}`;
       const actual = acumulado.get(key);
       if (actual) {
         actual.total += 1;
@@ -69,8 +76,8 @@ export class ReportesService {
       }
 
       acumulado.set(key, {
-        programadorId: asesoria.programadorId,
-        nombreProgramador: nombrePorId.get(asesoria.programadorId) ?? `ID ${asesoria.programadorId}`,
+        programadorId,
+        nombreProgramador: nombrePorId.get(programadorId) ?? `ID ${programadorId}`,
         fecha: asesoria.fecha,
         estado: asesoria.estado,
         total: 1,

@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {
-  Disponibilidad,
-  ModalidadDisponibilidad,
-  TipoDisponibilidad,
-} from '../../../domain/models';
+import { Disponibilidad, TipoDisponibilidad } from '../../../modelos/disponibilidad';
 import { GestionDisponibilidad } from '../../../servicios/servicios-gestiones/gestion-disponibilidad';
 
 @Component({
@@ -18,7 +14,7 @@ import { GestionDisponibilidad } from '../../../servicios/servicios-gestiones/ge
 export class TestDisponibilidades implements OnInit {
   disponibilidades: Disponibilidad[] = [];
   tipos: TipoDisponibilidad[] = ['recurrente', 'bloqueo'];
-  modalidades: ModalidadDisponibilidad[] = ['virtual', 'presencial'];
+  modalidades: Array<'virtual' | 'presencial'> = ['virtual', 'presencial'];
   cargando = false;
   mensaje = '';
   error = '';
@@ -26,9 +22,9 @@ export class TestDisponibilidades implements OnInit {
 
   disponibilidad: Disponibilidad = {
     id: 0,
-    programadorId: null,
+    programadorId: undefined,
     tipo: 'recurrente',
-    diaSemana: null,
+    diaSemana: undefined,
     fecha: '',
     hora: '',
     horaInicio: '',
@@ -58,17 +54,21 @@ export class TestDisponibilidades implements OnInit {
   guardar(): void {
     this.mensaje = '';
     this.error = '';
+    const id =
+      this.disponibilidad.id != null && this.disponibilidad.id !== ('' as any)
+        ? Number(this.disponibilidad.id)
+        : undefined;
     const payload: Disponibilidad = {
       ...this.disponibilidad,
-      id: Number(this.disponibilidad.id),
+      id,
       programadorId:
         this.disponibilidad.programadorId != null && this.disponibilidad.programadorId !== ('' as any)
           ? Number(this.disponibilidad.programadorId)
-          : null,
+          : undefined,
       diaSemana:
         this.disponibilidad.diaSemana != null && this.disponibilidad.diaSemana !== ('' as any)
           ? Number(this.disponibilidad.diaSemana)
-          : null,
+          : undefined,
     };
 
     if (!this.enEdicion) {
@@ -96,9 +96,10 @@ export class TestDisponibilidades implements OnInit {
     this.enEdicion = true;
   }
 
-  eliminar(id: number): void {
+  eliminar(id?: number): void {
     this.mensaje = '';
     this.error = '';
+    if (id == null) return;
     this.disponibilidadService.eliminar(id).subscribe({
       next: () => {
         this.mensaje = 'Disponibilidad eliminada.';
@@ -111,9 +112,9 @@ export class TestDisponibilidades implements OnInit {
   limpiar(): void {
     this.disponibilidad = {
       id: 0,
-      programadorId: null,
+      programadorId: undefined,
       tipo: 'recurrente',
-      diaSemana: null,
+      diaSemana: undefined,
       fecha: '',
       hora: '',
       horaInicio: '',

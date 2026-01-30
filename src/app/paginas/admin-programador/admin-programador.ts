@@ -85,7 +85,7 @@ export class AdminProgramador implements OnInit {
   ];
 
   nuevoProyecto: Proyecto = {
-    id: 0,
+    id: undefined,
     nombre: '',
     descripcion: '',
     seccion: 'academico',
@@ -115,7 +115,11 @@ export class AdminProgramador implements OnInit {
   //  Carga inicial
 
   private async cargarDatos(): Promise<void> {
-    const programadorId = this.auth.usuarioActual.programadorId ?? 1;
+    const programadorId = this.auth.usuarioActual.programadorId;
+    if (programadorId == null) {
+      this.programador = undefined;
+      return;
+    }
 
     this.programador = await this.programadorService.getProgramadorById(
       programadorId
@@ -398,6 +402,7 @@ export class AdminProgramador implements OnInit {
     );
     if (!confirmar) return;
 
+    if (d.id == null) return;
     await this.disponibilidadesService.eliminarPorId(d.id);
     await this.cargarHorarios();
   }
@@ -405,6 +410,11 @@ export class AdminProgramador implements OnInit {
   //  Asesorías
 
   async actualizarEstado(a: Asesoria): Promise<void> {
+    if (a.programadorId == null) {
+      alert('No se puede actualizar la asesoria sin programador asignado.');
+      return;
+    }
+
     if (a.estado === 'aprobada') {
       const asesoriasDia =
         await this.asesoriasService.getAsesoriasPorProgramadorYFecha(
@@ -430,6 +440,11 @@ export class AdminProgramador implements OnInit {
     );
     if (!confirmar) return;
 
+    if (a.id == null) {
+      alert('No se puede actualizar una asesoria sin ID.');
+      return;
+    }
+
     await this.asesoriasService.actualizarAsesoria(a.id, {
       estado: a.estado,
       mensajeRespuesta: a.mensajeRespuesta ?? '',
@@ -448,7 +463,7 @@ export class AdminProgramador implements OnInit {
   prepararNuevoProyecto(): void {
     this.editandoProyectoId = null;
     this.nuevoProyecto = {
-      id: 0,
+      id: undefined,
       nombre: '',
       descripcion: '',
       seccion: 'academico',
@@ -461,7 +476,7 @@ export class AdminProgramador implements OnInit {
   }
 
   editarProyecto(p: Proyecto): void {
-    this.editandoProyectoId = p.id;
+    this.editandoProyectoId = p.id ?? null;
     this.nuevoProyecto = { ...p };
     this.tecnologiasTexto = p.tecnologias.join(', ');
   }
@@ -487,14 +502,9 @@ export class AdminProgramador implements OnInit {
     const proyectosActuales = [...(this.programador.proyectos || [])];
 
     if (this.editandoProyectoId == null) {
-      const nuevoId =
-        proyectosActuales.length > 0
-          ? Math.max(...proyectosActuales.map((p) => p.id)) + 1
-          : Date.now();
-
       const proyectoAGuardar: Proyecto = {
         ...this.nuevoProyecto,
-        id: nuevoId,
+        id: undefined,
       };
 
       proyectosActuales.push(proyectoAGuardar);
@@ -515,7 +525,14 @@ export class AdminProgramador implements OnInit {
       proyectosActuales
     );
 
-    this.programador.proyectos = proyectosActuales;
+    const recargado = await this.programadorService.getProgramadorById(
+      this.programador.id
+    );
+    if (recargado) {
+      this.programador = recargado;
+    } else {
+      this.programador.proyectos = proyectosActuales;
+    }
     this.mensajeExito =
       this.editandoProyectoId == null
         ? 'Proyecto creado correctamente.'

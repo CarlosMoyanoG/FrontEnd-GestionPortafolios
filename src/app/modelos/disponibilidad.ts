@@ -1,8 +1,8 @@
 export type TipoDisponibilidad = 'recurrente' | 'bloqueo' | 'puntual';
 
 export interface Disponibilidad {
-  id: number;
-  programadorId: number;
+  id?: number;
+  programadorId?: number;
   tipo: TipoDisponibilidad;
   modalidad?: 'virtual' | 'presencial';
 

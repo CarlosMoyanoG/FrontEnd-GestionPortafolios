@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Proyecto, TipoParticipacion, TipoSeccionProyecto } from '../../../domain/models';
+import { Proyecto, TipoParticipacion, TipoSeccionProyecto } from '../../../modelos/proyecto';
 import { GestionProyecto } from '../../../servicios/servicios-gestiones/gestion-proyecto';
 
 @Component({

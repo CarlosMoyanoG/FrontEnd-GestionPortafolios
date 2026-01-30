@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Programador } from '../../../domain/models';
+import { Programador } from '../../../modelos/programador';
 import { GestionProgramador } from '../../../servicios/servicios-gestiones/gestion-programador';
 
 @Component({
@@ -29,6 +29,7 @@ export class TestProgramadores implements OnInit {
     linkedinUrl: '',
     sitioWeb: '',
     duenioUid: '',
+    proyectos: [],
   };
 
   constructor(private programadorService: GestionProgramador) {}
@@ -104,6 +105,7 @@ export class TestProgramadores implements OnInit {
       linkedinUrl: '',
       sitioWeb: '',
       duenioUid: '',
+      proyectos: [],
     };
     this.enEdicion = false;
   }

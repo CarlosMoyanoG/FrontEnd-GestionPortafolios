@@ -42,14 +42,18 @@ export class MisAsesoriasCliente implements OnInit {
     ]);
 
     const lista: AsesoriaConProgramador[] = asesorias.map(a => {
-      const prog = programadores.find(p => p.id === a.programadorId);
+      const prog =
+        a.programadorId != null
+          ? programadores.find(p => p.id === a.programadorId)
+          : undefined;
       return {
         ...a,
-        nombreProgramador: prog ? prog.nombre : `ID ${a.programadorId}`,
+        nombreProgramador:
+          prog?.nombre ?? (a.programadorId != null ? `ID ${a.programadorId}` : 'Sin asignar'),
       };
     });
 
-    lista.sort((a, b) => b.id - a.id);
+    lista.sort((a, b) => (b.id ?? 0) - (a.id ?? 0));
     this.asesoriasCliente = lista;
     this.notificacionesRecientes = lista.filter(a => a.estado !== 'pendiente');
     this.cargando = false;
