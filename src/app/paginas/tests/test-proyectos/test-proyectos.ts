@@ -22,7 +22,7 @@ export class TestProyectos implements OnInit {
   participaciones: TipoParticipacion[] = ['Frontend', 'Backend', 'Base de Datos', 'Fullstack'];
 
   proyecto: Proyecto = {
-    id: 0,
+    id: undefined,
     nombre: '',
     descripcion: '',
     seccion: 'academico',
@@ -56,9 +56,14 @@ export class TestProyectos implements OnInit {
       .map((t) => t.trim())
       .filter(Boolean);
 
+    const id =
+      this.proyecto.id != null && this.proyecto.id !== ('' as any)
+        ? Number(this.proyecto.id)
+        : undefined;
+
     const payload: Proyecto = {
       ...this.proyecto,
-      id: Number(this.proyecto.id),
+      id,
       tecnologias,
     };
 
@@ -86,9 +91,10 @@ export class TestProyectos implements OnInit {
     this.enEdicion = true;
   }
 
-  eliminar(id: number): void {
+  eliminar(id?: number): void {
     this.mensaje = '';
     this.error = '';
+    if (id == null) return;
     this.proyectoService.eliminar(id).subscribe({
       next: () => {
         this.mensaje = 'Proyecto eliminado.';
@@ -100,7 +106,7 @@ export class TestProyectos implements OnInit {
 
   limpiar(): void {
     this.proyecto = {
-      id: 0,
+      id: undefined,
       nombre: '',
       descripcion: '',
       seccion: 'academico',
